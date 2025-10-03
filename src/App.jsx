@@ -232,9 +232,6 @@ export default function App() {
           )}
         </div>
 
-        <div className="mt-6 text-center text-xs text-gray-500 dark:text-slate-400">
-          Tip: press 1–6 to toggle choices quickly.
-        </div>
       </div>
     </div>
   );
