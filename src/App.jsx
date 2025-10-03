@@ -1,264 +1,176 @@
-// App.jsx — Duolingo-style quiz (3 lives, minimal top bar, records per user)
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import defaultDeck from "./sap_basis_duo_questions.json";
 
-/* ================= Users & Storage ================= */
+// ----------------------
+// Small helpers
+// ----------------------
+function shuffle(arr) {
+  for (let j = arr.length - 1; j > 0; j--) {
+    const k = Math.floor(Math.random() * (j + 1));
+    [arr[j], arr[k]] = [arr[k], arr[j]];
+  }
+}
+function eqSets(a, b) {
+  if (a.size !== b.size) return false;
+  for (const v of a) if (!b.has(v)) return false;
+  return true;
+}
 const USERS = ["Cris", "Jose", "Adrian", "Sebas", "Enrique", "Isaac"];
-const USERS_KEY = "sap_basis_duo_users_v2";
 
-function loadAllUsers() {
-  try {
-    const raw = localStorage.getItem(USERS_KEY);
-    const base = raw ? JSON.parse(raw) : {};
-    for (const name of USERS) {
-      if (!base[name]) {
-        base[name] = {
-          points: 0,
-          bestPoints: 0,
-          seen: 0,
-          correct: 0,
-          streak: 0,
-          bestStreak: 0,
-          hearts: 3,
-        };
-      } else {
-        base[name].bestPoints ??= 0;
-        base[name].hearts ??= 3;
-      }
-    }
-    return base;
-  } catch {
-    const init = {};
-    for (const name of USERS) {
-      init[name] = {
+// ----------------------
+// UI atoms
+// ----------------------
+const Pill = ({ text, active, correct, wrong, onClick, disabled }) => (
+  <button
+    onClick={onClick}
+    disabled={disabled}
+    className={[
+      "w-full text-left rounded-2xl border px-5 py-4 transition-all",
+      "focus:outline-none focus:ring-2",
+      disabled ? "opacity-60 cursor-not-allowed" : "",
+      active ? "border-emerald-500 ring-emerald-300" : "border-gray-200 hover:border-gray-300",
+      correct ? "!border-green-500" : "",
+      wrong ? "!border-red-500" : "",
+      "bg-white dark:bg-slate-900",
+      "text-gray-800 dark:text-gray-100",
+    ].join(" ")}
+  >
+    <span className="text-[15px]">{text}</span>
+  </button>
+);
+
+const Bubble = ({ children, sub }) => (
+  <div className="w-full rounded-2xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-5 py-6 shadow-sm">
+    <div className="flex items-start gap-3">
+      <div className="h-10 w-10 rounded-full bg-emerald-500" />
+      <div>
+        <p className="text-[18px] font-semibold text-gray-800 dark:text-gray-100 leading-6">{children}</p>
+        {sub ? <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{sub}</p> : null}
+      </div>
+    </div>
+  </div>
+);
+
+const Hearts = ({ hearts, broken }) => {
+  const items = [];
+  for (let i = 0; i < 3; i++) {
+    const isLost = i < broken;
+    items.push(
+      <span key={i} className="text-xl select-none">
+        {isLost ? "💔" : "❤️"}
+      </span>
+    );
+  }
+  return <div className="flex gap-2 items-center">{items}</div>;
+};
+
+const ProgressBar = ({ value }) => (
+  <div className="h-2 w-full rounded bg-slate-700/50 overflow-hidden">
+    <div className="h-full bg-emerald-500 transition-all" style={{ width: `${value}%` }} />
+  </div>
+);
+
+// ----------------------
+// Main App
+// ----------------------
+export default function App() {
+  // dataset
+  const [deck, setDeck] = useState(() => {
+    const initial = Array.isArray(defaultDeck) ? [...defaultDeck] : [];
+    shuffle(initial);
+    // shuffle choices for each question to avoid position bias
+    initial.forEach((q) => shuffle(q.choices));
+    return initial;
+  });
+  const [i, setI] = useState(0);
+
+  // users & stats
+  const [currentUser, setCurrentUser] = useState(() => {
+    return localStorage.getItem("sap_duo_user") || USERS[0];
+  });
+  const [allUsers, setAllUsers] = useState(() => {
+    const raw = localStorage.getItem("sap_duo_users");
+    const base = {};
+    USERS.forEach((u) => {
+      base[u] = {
         points: 0,
         bestPoints: 0,
         seen: 0,
         correct: 0,
         streak: 0,
         bestStreak: 0,
-        hearts: 3,
+        hearts: 3, // remaining hearts in current run
+        brokenHearts: 0, // how many are broken (kept broken)
       };
+    });
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw);
+        return { ...base, ...parsed };
+      } catch {
+        return base;
+      }
     }
-    return init;
-  }
-}
-function saveAllUsers(obj) {
-  localStorage.setItem(USERS_KEY, JSON.stringify(obj));
-}
-function getUserStats(all, name) {
-  return (
-    all[name] || {
-      points: 0,
-      bestPoints: 0,
-      seen: 0,
-      correct: 0,
-      streak: 0,
-      bestStreak: 0,
-      hearts: 3,
-    }
-  );
-}
-function setUserStats(all, name, stats) {
-  all[name] = stats;
-  saveAllUsers(all);
-}
+    return base;
+  });
 
-/* ================= UI Bits ================= */
-const Pill = ({ letter, text, active, correct, wrong, onClick, disabled }) => (
-  <button
-    onClick={onClick}
-    disabled={disabled}
-    className={[
-      "w-full text-left rounded-2xl border px-5 py-4 transition-all shadow-sm",
-      "focus:outline-none focus:ring-2",
-      disabled ? "opacity-60 cursor-not-allowed" : "hover:-translate-y-[1px]",
-      active ? "border-emerald-500 ring-emerald-300 bg-white" : "border-gray-200 bg-white hover:border-gray-300",
-      correct ? "!border-green-500" : "",
-      wrong ? "!border-red-500" : "",
-      "dark:bg-slate-800 dark:border-slate-700 dark:text-slate-100",
-    ].join(" ")}
-    title="Click to select"
-  >
-    <div className="flex items-start">
-      <span
-        className={[
-          "mr-3 inline-flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold",
-          active ? "bg-emerald-500 text-white" : "bg-gray-100 text-gray-700",
-          correct ? "!bg-green-500 !text-white" : "",
-          wrong ? "!bg-red-500 !text-white" : "",
-        ].join(" ")}
-      >
-        {letter}
-      </span>
-      <span className="text-gray-800 text-[15px] leading-6 dark:text-slate-100">{text}</span>
-    </div>
-  </button>
-);
-
-const Bubble = ({ children, sub }) => (
-  <div className="w-full rounded-3xl border border-gray-200 bg-white px-6 py-7 shadow-sm animate-[pop_220ms_ease-out] dark:bg-slate-900 dark:border-slate-700">
-    <div className="flex items-start gap-3">
-      <div className="h-10 w-10 rounded-full bg-emerald-500 shadow-inner" />
-      <div>
-        <p className="text-[18px] font-semibold text-gray-900 leading-6 dark:text-slate-100">{children}</p>
-        {sub ? <p className="mt-1 text-sm text-gray-500 dark:text-slate-400">{sub}</p> : null}
-      </div>
-    </div>
-  </div>
-);
-
-// Hearts: ❤️ full, 💔 broken (persists)
-const Hearts = ({ lives, maxLives = 3, lostAnim }) => (
-  <div className="flex items-center gap-1">
-    {Array.from({ length: maxLives }).map((_, idx) => {
-      const full = idx < lives;
-      const breaking = !full && idx === lives && lostAnim;
-      return (
-        <span
-          key={idx}
-          className={["text-xl select-none", "text-red-500", breaking ? "animate-[heartbreak_700ms_ease]" : ""].join(" ")}
-        >
-          {full ? "❤️" : "💔"}
-        </span>
-      );
-    })}
-  </div>
-);
-
-// minimal top bar (mobile-friendly)
-const TopBar = ({ seen, correct, streak, lives, total, currentUser, onChangeUser, lostAnim }) => {
-  const acc = seen ? Math.round((correct / seen) * 100) : 0;
-  const progress = total ? Math.round((seen / total) * 100) : 0;
-  return (
-    <div className="flex flex-col gap-2">
-      <div className="w-full flex items-center justify-between text-sm font-medium dark:text-slate-300">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1 text-amber-500 font-semibold">
-            <span className="text-xl">🔥</span>
-            <span>{streak}</span>
-          </div>
-          <div className="ml-2 flex items-center gap-3 text-gray-600 dark:text-slate-300">
-            <div>Seen: {seen}</div>
-            <div>✔️ {correct}</div>
-          </div>
-        </div>
-        <div className="flex items-center gap-3">
-          <select
-            value={currentUser}
-            onChange={(e) => onChangeUser(e.target.value)}
-            className="rounded-lg border border-gray-300 bg-white px-2 py-1 text-sm dark:bg-slate-900 dark:border-slate-700"
-            title="Active user"
-          >
-            {USERS.map((u) => (
-              <option key={u} value={u}>
-                {u}
-              </option>
-            ))}
-          </select>
-          <Hearts lives={lives} maxLives={3} lostAnim={lostAnim} />
-        </div>
-      </div>
-
-      <div className="h-2 w-full rounded-full bg-gray-200 overflow-hidden dark:bg-slate-700">
-        <div className="h-full bg-emerald-500 transition-all" style={{ width: `${progress}%` }} />
-      </div>
-    </div>
-  );
-};
-
-// two leaderboards (best points record & best streak)
-const Leaderboard = ({ allUsers }) => {
-  const list = Object.entries(allUsers).map(([name, s]) => ({ name, ...s }));
-  const topBestPoints = [...list].sort((a, b) => b.bestPoints - a.bestPoints).slice(0, 6);
-  const topBestStreak = [...list].sort((a, b) => b.bestStreak - a.bestStreak).slice(0, 6);
-
-  const Card = ({ title, items, valueKey, valueClass }) => (
-    <div className="rounded-2xl border border-gray-200 bg-white p-4 dark:bg-slate-900 dark:border-slate-700">
-      <h3 className="font-semibold mb-3 text-gray-800 dark:text-slate-100">{title}</h3>
-      <ul className="space-y-2">
-        {items.map((u, idx) => (
-          <li key={u.name} className="flex justify-between text-sm">
-            <div className="flex items-center gap-2">
-              <span className="w-6 text-gray-500">{idx + 1}.</span>
-              <span className="font-medium">{u.name}</span>
-            </div>
-            <span className={`font-semibold ${valueClass}`}>{u[valueKey]}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-
-  return (
-    <div className="grid md:grid-cols-2 gap-4 mt-8">
-      <Card title="🏆 Top Best Points (Record)" items={topBestPoints} valueKey="bestPoints" valueClass="text-sky-600 dark:text-sky-300" />
-      <Card title="🔥 Top Best Streak" items={topBestStreak} valueKey="bestStreak" valueClass="text-amber-600 dark:text-amber-300" />
-    </div>
-  );
-};
-
-/* ================= Main App ================= */
-export default function App() {
-  const MAX_LIVES = 3;
-
-  const [deck, setDeck] = useState([]);
-  const [i, setI] = useState(0);
-
-  const [chosen, setChosen] = useState(new Set());
-  const [phase, setPhase] = useState("answer"); // answer | review
-
-  const [allUsers, setAllUsers] = useState(loadAllUsers());
-  const [currentUser, setCurrentUser] = useState(USERS[0]);
-
-  const [lostAnim, setLostAnim] = useState(false);
-  const prevHearts = useRef(null);
-
-  // active user stats
-  const stats = getUserStats(allUsers, currentUser);
-  const { points, bestPoints, seen, correct, streak, bestStreak, hearts } = stats;
-
+  const s = allUsers[currentUser];
   const cur = deck[i];
   const answers = cur?.answers || [];
   const isMulti = answers.length > 1;
   const maxSelectable = answers.length || 1;
 
+  // selection / phase / progress
+  const [chosen, setChosen] = useState(new Set());
+  const [phase, setPhase] = useState("answer"); // answer | review
+  const progress = useMemo(() => {
+    if (!deck.length) return 0;
+    return Math.min(100, Math.round(((i + 1) / deck.length) * 100));
+  }, [i, deck.length]);
+
+  function saveAllUsers(next) {
+    setAllUsers(next);
+    localStorage.setItem("sap_duo_users", JSON.stringify(next));
+  }
+
+  // ---- Load leaderboard from Vercel KV and merge records
   useEffect(() => {
-    const initial = Array.isArray(defaultDeck) ? [...defaultDeck] : [];
-    shuffle(initial);
-    setDeck(initial);
+    fetch("/api/leaderboard-get")
+      .then((r) => r.json())
+      .then((remote) => {
+        const remoteUsers = remote?.users || {};
+        saveAllUsers((prev => {
+          const next = typeof prev === "object" ? { ...prev } : { };
+          USERS.forEach((u) => {
+            if (!next[u]) {
+              next[u] = { points:0, bestPoints:0, seen:0, correct:0, streak:0, bestStreak:0, hearts:3, brokenHearts:0 };
+            }
+          });
+          for (const [name, rec] of Object.entries(remoteUsers)) {
+            if (!next[name]) continue;
+            next[name].bestPoints = Math.max(next[name].bestPoints || 0, rec.bestPoints || 0);
+            next[name].bestStreak = Math.max(next[name].bestStreak || 0, rec.bestStreak || 0);
+          }
+          return next;
+        }));
+      })
+      .catch(() => {});
   }, []);
 
-  function shuffle(arr) {
-    for (let j = arr.length - 1; j > 0; j--) {
-      const k = Math.floor(Math.random() * (j + 1));
-      [arr[j], arr[k]] = [arr[k], arr[j]];
-    }
+  // ---- Handle user change
+  function onUserChange(e) {
+    const name = e.target.value;
+    setCurrentUser(name);
+    localStorage.setItem("sap_duo_user", name);
+    setChosen(new Set());
+    setPhase("answer");
   }
 
-  function updateUser(mutator) {
-    setAllUsers((prev) => {
-      const next = { ...prev };
-      const s = { ...getUserStats(prev, currentUser) };
-      mutator(s);
-      setUserStats(next, currentUser, s);
-      return next;
-    });
-  }
-
-  // broken-heart animation when hearts drop
-  useEffect(() => {
-    if (prevHearts.current !== null && hearts < prevHearts.current) {
-      setLostAnim(true);
-      const t = setTimeout(() => setLostAnim(false), 700);
-      return () => clearTimeout(t);
-    }
-    prevHearts.current = hearts;
-  }, [hearts]);
-
+  // ---- Single click selection with limit (multi selects up to maxSelectable)
   function toggleChoice(letter) {
     if (!cur || phase !== "answer") return;
     const next = new Set(chosen);
+
     if (next.has(letter)) {
       next.delete(letter);
     } else if (!isMulti) {
@@ -270,75 +182,99 @@ export default function App() {
     setChosen(next);
   }
 
+  // ---- Submit answer
   function submit() {
     if (!cur || chosen.size === 0) return;
     const ok = eqSets(chosen, new Set(answers)) || answers.length === 0;
 
-    updateUser((s) => {
-      s.seen += 1;
-      if (ok) {
-        s.correct += 1;
-        s.points = (s.points || 0) + 10; // never subtract
-        s.streak += 1;
-        s.bestStreak = Math.max(s.bestStreak || 0, s.streak);
-      } else {
-        s.streak = 0;
-        s.hearts = Math.max(0, (s.hearts || MAX_LIVES) - 1); // lose life
+    // update per-user stats
+    const next = { ...allUsers };
+    const stats = { ...s };
+
+    stats.seen += 1;
+    if (ok) {
+      stats.correct += 1;
+      stats.points += 10; // add points, never subtract
+      stats.streak += 1;
+      if (stats.streak > stats.bestStreak) stats.bestStreak = stats.streak;
+      if (stats.points > stats.bestPoints) stats.bestPoints = stats.points;
+    } else {
+      // wrong: break a heart permanently
+      if (stats.brokenHearts < 3) {
+        stats.brokenHearts += 1;
       }
-    });
+      stats.hearts = Math.max(0, 3 - stats.brokenHearts);
+      // reset current streak only
+      stats.streak = 0;
+    }
+
+    next[currentUser] = stats;
+    saveAllUsers(next);
 
     setPhase("review");
+
+    // If hearts finished, finalize run -> push record to KV and reset run counters
+    if (stats.hearts === 0) {
+      finalizeRun(stats);
+    }
   }
 
-  // when hearts reach 0 -> finalize run, update bestPoints if improved, reset run (not global records)
-  useEffect(() => {
-    if (hearts === 0) {
-      setTimeout(() => {
-        setAllUsers((prev) => {
-          const next = { ...prev };
-          const s = { ...getUserStats(prev, currentUser) };
+  // ---- Finalize a run (lost all lives): upsert to KV and reset run counters
+  async function finalizeRun(stats) {
+    try {
+      await fetch("/api/leaderboard-upsert", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          name: currentUser,
+          bestPoints: stats.bestPoints || 0,
+          bestStreak: stats.bestStreak || 0,
+        }),
+      });
+    } catch (_) {}
 
-          // update personal record
-          s.bestPoints = Math.max(s.bestPoints || 0, s.points || 0);
+    // reset in-app counters for a new attempt
+    const reset = { ...allUsers };
+    reset[currentUser] = {
+      ...stats,
+      points: 0,
+      seen: 0,
+      correct: 0,
+      streak: 0,
+      hearts: 3,
+      brokenHearts: 0,
+    };
+    saveAllUsers(reset);
 
-          // reset run
-          s.points = 0;
-          s.seen = 0;
-          s.correct = 0;
-          s.streak = 0;
-          s.hearts = MAX_LIVES;
+    // reset deck progress visuals
+    setChosen(new Set());
+    setPhase("answer");
+    setI(0);
+    // reshuffle deck and choices for a fresh start
+    const fresh = [...defaultDeck];
+    shuffle(fresh);
+    fresh.forEach((q) => shuffle(q.choices));
+    setDeck(fresh);
+  }
 
-          setUserStats(next, currentUser, s);
-          return next;
-        });
-
-        const fresh = Array.isArray(defaultDeck) ? [...defaultDeck] : [];
-        shuffle(fresh);
-        setDeck(fresh);
-        setI(0);
-        setChosen(new Set());
-        setPhase("answer");
-        alert(`💔 ${currentUser} ran out of hearts! Run reset.\nYour best points record is saved.`);
-      }, 50);
-    }
-  }, [hearts]); // eslint-disable-line
-
-  function next() {
-    if (!cur || hearts === 0) return;
+  // ---- Next question
+  function nextQ() {
+    if (!cur) return;
     let nextIndex = i + 1;
     if (nextIndex >= deck.length) {
-      const acc = Math.round((stats.correct / Math.max(1, stats.seen)) * 100);
-      alert(
-        `Finished, ${currentUser}!\nAccuracy: ${acc}%  •  Points this run: ${stats.points}\nBest Points: ${bestPoints}  •  Best Streak: ${bestStreak}`
-      );
-      return;
+      // loop back with reshuffle
+      const fresh = [...defaultDeck];
+      shuffle(fresh);
+      fresh.forEach((q) => shuffle(q.choices));
+      setDeck(fresh);
+      nextIndex = 0;
     }
     setI(nextIndex);
     setChosen(new Set());
     setPhase("answer");
   }
 
-  // selection shortcuts (1–6)
+  // keyboard: 1..6 to select
   useEffect(() => {
     const onKey = (e) => {
       const digits = ["1", "2", "3", "4", "5", "6"];
@@ -349,38 +285,65 @@ export default function App() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [cur, chosen, phase, deck, i]);
+  }, [cur, deck, i]);
 
   const subHint = cur ? (isMulti ? `Multiple answers: select ${maxSelectable}.` : `Single answer.`) : undefined;
   const selectedCount = chosen.size;
   const atLimit = phase === "answer" && isMulti && selectedCount >= maxSelectable;
 
-  return (
-    <div className="min-h-screen bg-[#0b1220] text-gray-800 dark:bg-slate-950 dark:text-slate-100">
-      {/* tiny CSS animations */}
-      <style>{`
-        @keyframes pop { from { transform: scale(.98); opacity:.92 } to { transform: scale(1); opacity:1 } }
-        @keyframes heartbreak {
-          0% { transform: scale(1); filter: hue-rotate(0deg); }
-          40% { transform: scale(1.15) rotate(-8deg); }
-          60% { transform: scale(0.95) rotate(6deg); }
-          100% { transform: scale(1); }
-        }
-      `}</style>
+  // Leaderboards (from local state; already merged with KV on mount)
+  const topStreaks = useMemo(() => {
+    return [...USERS]
+      .map((u) => ({ name: u, v: allUsers[u]?.bestStreak || 0 }))
+      .sort((a, b) => b.v - a.v)
+      .slice(0, 6);
+  }, [allUsers]);
 
-      <div className="mx-auto w-full max-w-3xl px-5 py-6">
-        {/* Top bar */}
+  const topPoints = useMemo(() => {
+    return [...USERS]
+      .map((u) => ({ name: u, v: allUsers[u]?.bestPoints || 0 }))
+      .sort((a, b) => b.v - a.v)
+      .slice(0, 6);
+  }, [allUsers]);
+
+  const acc = s.seen ? Math.round((s.correct / s.seen) * 100) : 0;
+
+  return (
+    <div className="min-h-screen bg-[#0B1220] text-gray-100">
+      <div className="mx-auto w-full max-w-3xl px-4 py-4 sm:px-5 sm:py-6">
+        {/* Top bar (mobile friendly) */}
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <span className="text-xl">🔥</span>
+            <span className="text-sm">Streak</span>
+            <span className="rounded-md border border-emerald-700 bg-emerald-900/30 px-2 py-1 text-emerald-300 text-sm font-semibold">
+              {s.streak}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <select
+              className="rounded-md bg-slate-900 border border-slate-700 px-2 py-1 text-sm"
+              value={currentUser}
+              onChange={onUserChange}
+            >
+              {USERS.map((u) => (
+                <option key={u} value={u}>{u}</option>
+              ))}
+            </select>
+
+            <Hearts hearts={s.hearts} broken={s.brokenHearts} />
+          </div>
+        </div>
+
+        {/* Accuracy line */}
+        <div className="mb-4 text-sm text-gray-300">
+          ✔️ {s.correct} / {s.seen} — {acc}%
+        </div>
+
+        {/* Progress */}
         <div className="mb-4">
-          <TopBar
-            seen={seen}
-            correct={correct}
-            streak={streak}
-            lives={hearts}
-            total={deck.length}
-            currentUser={currentUser}
-            onChangeUser={setCurrentUser}
-            lostAnim={lostAnim}
-          />
+          <ProgressBar value={progress} />
         </div>
 
         {/* Question */}
@@ -388,15 +351,15 @@ export default function App() {
           {cur ? <Bubble sub={subHint}>{cur.q}</Bubble> : <Bubble>Deck loaded. Click an option to start.</Bubble>}
         </div>
 
-        {/* Multi selection counter (optional) */}
+        {/* Multi counter */}
         {cur && isMulti && (
-          <div className="mb-4 text-sm text-gray-300">
+          <div className="mb-3 text-sm text-gray-300">
             Selected: <span className="font-semibold">{selectedCount}</span> / {maxSelectable}
           </div>
         )}
 
         {/* Choices */}
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-3">
           {cur &&
             cur.choices.map(([L, text], idx) => {
               const isActive = chosen.has(L);
@@ -406,8 +369,7 @@ export default function App() {
               return (
                 <Pill
                   key={idx}
-                  letter={L}
-                  text={text}
+                  text={`${L}. ${text}`}
                   active={isActive}
                   correct={isCorrect}
                   wrong={isWrong}
@@ -419,14 +381,12 @@ export default function App() {
         </div>
 
         {/* Actions */}
-        <div className="mt-8 flex items-center justify-center gap-3">
+        <div className="mt-6 flex items-center justify-center gap-3">
           {cur && phase === "answer" && (
             <button
-              className={`rounded-xl px-8 py-3 font-bold transition-all border ${
-                chosen.size > 0
-                  ? "bg-emerald-400 hover:bg-emerald-300 text-black"
-                  : "bg-gray-300 dark:bg-slate-700 dark:text-slate-300 cursor-not-allowed text-black"
-              } dark:text-white`}
+              className={`rounded-xl px-8 py-3 font-bold transition-all border 
+                ${chosen.size > 0 ? "bg-emerald-500 hover:bg-emerald-400" : "bg-slate-600 cursor-not-allowed"} 
+                text-black`}
               disabled={chosen.size === 0}
               onClick={submit}
             >
@@ -435,24 +395,44 @@ export default function App() {
           )}
           {cur && phase === "review" && (
             <button
-              className="rounded-xl px-8 py-3 font-bold transition-all border bg-emerald-400 hover:bg-emerald-300 text-black dark:text-white"
-              onClick={next}
+              className="rounded-xl px-8 py-3 font-bold transition-all border bg-emerald-500 hover:bg-emerald-400 text-black"
+              onClick={nextQ}
             >
               NEXT
             </button>
           )}
         </div>
 
-        {/* Leaderboard (records only) */}
-        <Leaderboard allUsers={allUsers} />
+        {/* Leaderboards */}
+        <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="rounded-2xl border border-slate-700 bg-slate-900 p-4">
+            <h3 className="mb-3 font-semibold text-sky-300">Top Best Streaks</h3>
+            <ol className="space-y-2">
+              {topStreaks.map((t, idx) => (
+                <li key={t.name} className="flex justify-between text-sm">
+                  <span className="text-gray-300">{idx + 1}. {t.name}</span>
+                  <span className="font-semibold text-emerald-300">{t.v}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+          <div className="rounded-2xl border border-slate-700 bg-slate-900 p-4">
+            <h3 className="mb-3 font-semibold text-sky-300">Top Best Points</h3>
+            <ol className="space-y-2">
+              {topPoints.map((t, idx) => (
+                <li key={t.name} className="flex justify-between text-sm">
+                  <span className="text-gray-300">{idx + 1}. {t.name}</span>
+                  <span className="font-semibold text-emerald-300">{t.v}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+
+        <div className="mt-6 text-center text-xs text-gray-500">
+          Records sync via Vercel KV. New bests upload automatically when you lose all lives.
+        </div>
       </div>
     </div>
   );
-}
-
-/* ================= helpers ================= */
-function eqSets(a, b) {
-  if (a.size !== b.size) return false;
-  for (const v of a) if (!b.has(v)) return false;
-  return true;
 }
