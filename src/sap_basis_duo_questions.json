@@ -1,0 +1,2147 @@
+[
+  {
+    "q": "Which of the following actions can be executed in transaction Edit Profile Parameters (RZ11)? Note: There are 2 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "Download values of all profile parameters in one step."
+      ],
+      [
+        "B",
+        "Display the value of individual profile parameters."
+      ],
+      [
+        "C",
+        "Set new values for profile parameters in profile files."
+      ],
+      [
+        "D",
+        "Change values of dynamic profile parameters."
+      ]
+    ],
+    "answers": [
+      "C",
+      "D"
+    ]
+  },
+  {
+    "q": "Which entity contains authorizations for users in an AS ABAP-based SAP system?",
+    "choices": [
+      [
+        "A",
+        "Single role"
+      ],
+      [
+        "B",
+        "Composite role"
+      ],
+      [
+        "C",
+        "Authorization profile"
+      ],
+      [
+        "D",
+        "Authorization object"
+      ]
+    ],
+    "answers": [
+      "D"
+    ]
+  },
+  {
+    "q": "Which of the following is a command-line tool to start or stop SAP systems and SAP instances?",
+    "choices": [
+      [
+        "A",
+        "Icmon"
+      ],
+      [
+        "B",
+        "JSmon"
+      ],
+      [
+        "C",
+        "SAPControl"
+      ],
+      [
+        "D",
+        "SAP MC"
+      ]
+    ],
+    "answers": [
+      "C"
+    ]
+  },
+  {
+    "q": "When importing a transport request, which steps are executed by a batch job? Note: There are 3 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "Import of dictionary objects"
+      ],
+      [
+        "B",
+        "Distribution"
+      ],
+      [
+        "C",
+        "Activation of dictionary objects"
+      ],
+      [
+        "D",
+        "Move nametab"
+      ],
+      [
+        "E",
+        "Activation of ABAP programs"
+      ]
+    ],
+    "answers": [
+      "B",
+      "C",
+      "D"
+    ]
+  },
+  {
+    "q": "You are using a Change and Transport System (CTS) for the transport of native SAP HANA applications. Which tool can you use to create a transport request for these applications in the CTS system?",
+    "choices": [
+      [
+        "A",
+        "Transport Organizer Web UI (transaction STMS)"
+      ],
+      [
+        "B",
+        "Transport Organizer (Extended View) (transaction SE01)"
+      ],
+      [
+        "C",
+        "Transport Organizer (transaction SE09)"
+      ],
+      [
+        "D",
+        "Database Assistant (transaction DB50N)"
+      ]
+    ],
+    "answers": [
+      "C"
+    ]
+  },
+  {
+    "q": "When performing a local client copy with transaction SCCLN, in which client is it recommended to start the client copy?",
+    "choices": [
+      [
+        "A",
+        "A client different from both the source and the target client"
+      ],
+      [
+        "B",
+        "The source client"
+      ],
+      [
+        "C",
+        "The target client"
+      ]
+    ],
+    "answers": [
+      "A"
+    ]
+  },
+  {
+    "q": "How are savepoints triggered? Note: There are 2 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "By performing a database backup"
+      ],
+      [
+        "B",
+        "By a database soft shutdown"
+      ],
+      [
+        "C",
+        "By issuing a transactional commit"
+      ],
+      [
+        "D",
+        "By performing a delta merge"
+      ]
+    ],
+    "answers": [
+      "A",
+      "B"
+    ]
+  },
+  {
+    "q": "What can you do to determine the SAPUI5 patch level in an AS ABAP-based SAP system?",
+    "choices": [
+      [
+        "A",
+        "Execute the ICF service /sap/public/bc/ui5_ui5"
+      ],
+      [
+        "B",
+        "Check the version of software component SAP_UI"
+      ],
+      [
+        "C",
+        "Use the program WDG_MAINTAIN_UR_MIMES"
+      ],
+      [
+        "D",
+        "Use the program /UI5/UI5_UPLOAD_PATCH_TO_MIME"
+      ]
+    ],
+    "answers": [
+      "A"
+    ]
+  },
+  {
+    "q": "What actions can you perform using the SAP_FIORI_FOUNDATION_S4 task list? Note: There are 3 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "Schedule a job for calculation of SAPUI5 application index."
+      ],
+      [
+        "B",
+        "Generate SAP Fiori foundation roles."
+      ],
+      [
+        "C",
+        "Replicate backend catalogs."
+      ],
+      [
+        "D",
+        "Enable SAP GUI for HTML."
+      ],
+      [
+        "E",
+        "Create users with generated business roles."
+      ]
+    ],
+    "answers": [
+      "B",
+      "C",
+      "D"
+    ]
+  },
+  {
+    "q": "You plan to update an AS ABAP-based SAP system with the role “Quality Assurance System”. Which of the following actions might be required before you start Software Update Manager (SUM) for this system? Note: There are 2 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "Import the modification adjustment transports from the update of the “Development System”."
+      ],
+      [
+        "B",
+        "Follow the instructions in the SAP Notes for the used version of SUM."
+      ],
+      [
+        "C",
+        "Update the database software."
+      ],
+      [
+        "D",
+        "Execute the SAP Load Generator (SGEN) transaction for invalid loads."
+      ]
+    ],
+    "answers": [
+      "B",
+      "C"
+    ]
+  },
+  {
+    "q": "You are preparing an installation of an AS ABAP-based SAP system. You already downloaded all software that Maintenance Planner can calculate. What else must you download?",
+    "choices": [
+      [
+        "A",
+        "SAP kernel"
+      ],
+      [
+        "B",
+        "SAPCAR"
+      ],
+      [
+        "C",
+        "SPAM/SAINT update"
+      ],
+      [
+        "D",
+        "SAP Host Agent"
+      ]
+    ],
+    "answers": [
+      "B"
+    ]
+  },
+  {
+    "q": "When installing an SAP S/4HANA Server 1909 system, which actions can the Software Provisioning Manager (SWPM) perform only when the installation is started with the option SAPINST_STACK_XML? Note: There are 3 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "Apply a SPAM/SAINT update"
+      ],
+      [
+        "B",
+        "Set the password of user DDIC in client 000"
+      ],
+      [
+        "C",
+        "Set up Transport Management System (TMS)"
+      ],
+      [
+        "D",
+        "Import additional languages"
+      ],
+      [
+        "E",
+        "Install an SAP Host Agent"
+      ]
+    ],
+    "answers": [
+      "A",
+      "C",
+      "D"
+    ]
+  },
+  {
+    "q": "You have passed the initial authentication for an SAP Fiori transactional app. Which authentication technology is used for subsequent OData calls of this app?",
+    "choices": [
+      [
+        "A",
+        "SAML 2.0"
+      ],
+      [
+        "B",
+        "X.509 client certificates"
+      ],
+      [
+        "C",
+        "SAP logon tickets"
+      ],
+      [
+        "D",
+        "ABAP Session Security"
+      ]
+    ],
+    "answers": [
+      "D"
+    ]
+  },
+  {
+    "q": "When releasing a workbench request from the development system, what are prerequisites for an export to take place? Note: There are 3 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "Repository objects within the workbench request must be assigned to a package."
+      ],
+      [
+        "B",
+        "A delivery route from the development system to a subsequent system must exist."
+      ],
+      [
+        "C",
+        "Repository objects within the workbench request must be assigned to the same transport layer."
+      ],
+      [
+        "D",
+        "Packages used by objects in the workbench request must be assigned to a valid transport layer."
+      ],
+      [
+        "E",
+        "A consolidation route from the development system to a subsequent system must exist."
+      ]
+    ],
+    "answers": [
+      "A",
+      "D",
+      "E"
+    ]
+  },
+  {
+    "q": "What is the correct sequence of the following four steps when you restart the SAP HANA database system?",
+    "choices": [
+      [
+        "A",
+        "Row tables are loaded into memory. Column tables are loaded. Open transactions are recovered. Aborted transactions are rolled back."
+      ],
+      [
+        "B",
+        "Aborted transactions are rolled back. Open transactions are recovered. Row tables are loaded into memory. Column tables are loaded."
+      ],
+      [
+        "C",
+        "Row tables are loaded into memory. Open transactions are recovered. Aborted transactions are rolled back. Column tables are loaded."
+      ],
+      [
+        "D",
+        "Aborted transactions are rolled back. Row tables are loaded into memory. Open transactions are recovered. Column tables are loaded."
+      ]
+    ],
+    "answers": [
+      "C"
+    ]
+  },
+  {
+    "q": "Which app types need SAP HANA as system database? Note: There are 2 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "Analytical apps"
+      ],
+      [
+        "B",
+        "Fact sheet apps"
+      ],
+      [
+        "C",
+        "Transactional apps"
+      ],
+      [
+        "D",
+        "Classic applications"
+      ]
+    ],
+    "answers": [
+      "A",
+      "B"
+    ]
+  },
+  {
+    "q": "In an SAP S/4HANA Server system, a target system alias FIORI is maintained for source system alias S4FIN. Which connection is relevant for the extraction of back-end catalogs with alias S4FIN?",
+    "choices": [
+      [
+        "A",
+        "S4FIN_RFC"
+      ],
+      [
+        "B",
+        "FIORI_RFC"
+      ],
+      [
+        "C",
+        "S4FIN_HTTPS"
+      ],
+      [
+        "D",
+        "FIORI_HTTPS"
+      ]
+    ],
+    "answers": [
+      "B"
+    ]
+  },
+  {
+    "q": "Which file systems are supported for the data and log volumes of the SAP HANA 2.0 database system? Note: There are 2 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "OCFS2"
+      ],
+      [
+        "B",
+        "Btrfs"
+      ],
+      [
+        "C",
+        "XFS"
+      ],
+      [
+        "D",
+        "GPFS"
+      ]
+    ],
+    "answers": [
+      "C",
+      "D"
+    ]
+  },
+  {
+    "q": "From top to bottom, what is the hierarchy of the NetWeaver Administrator (NWA)?",
+    "choices": [
+      [
+        "A",
+        "Work Set → Work Center → Function"
+      ],
+      [
+        "B",
+        "Work Center → Function → Work Set"
+      ],
+      [
+        "C",
+        "Work Center → Work Set → Function"
+      ],
+      [
+        "D",
+        "Function → Work Center → Work Set"
+      ]
+    ],
+    "answers": [
+      "C"
+    ]
+  },
+  {
+    "q": "Which of the following background jobs has the highest priority?",
+    "choices": [
+      [
+        "A",
+        "Class A job without a target server"
+      ],
+      [
+        "B",
+        "Class C job with a target server"
+      ],
+      [
+        "C",
+        "Class C job without a target server"
+      ],
+      [
+        "D",
+        "Class A job with a target server"
+      ]
+    ],
+    "answers": [
+      "D"
+    ]
+  },
+  {
+    "q": "Under which Java System Properties category do you find an AS Java-based Manager in the SAP NetWeaver Administrator (NWA)?",
+    "choices": [
+      [
+        "A",
+        "Kernel"
+      ],
+      [
+        "B",
+        "VM Environment"
+      ],
+      [
+        "C",
+        "Applications"
+      ],
+      [
+        "D",
+        "Services"
+      ]
+    ],
+    "answers": [
+      "A"
+    ]
+  },
+  {
+    "q": "Which actions can be performed with the Software Update Manager (SUM) for an AS ABAP-based SAP system? Note: There are 3 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "Applying an SAP kernel patch"
+      ],
+      [
+        "B",
+        "Applying a SPAM/SAINT update"
+      ],
+      [
+        "C",
+        "Correcting software information via a CISI run"
+      ],
+      [
+        "D",
+        "Installing an SAP Host Agent"
+      ],
+      [
+        "E",
+        "Setting up the Transport Management System (TMS)"
+      ]
+    ],
+    "answers": [
+      "A",
+      "B",
+      "C"
+    ]
+  },
+  {
+    "q": "What are prerequisites for enabling communication between a standalone SAP Web Dispatcher and an AS ABAP-based SAP system? Note: There are 2 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "Identification of the HTTP port of the ABAP message server"
+      ],
+      [
+        "B",
+        "Activation of ICF service /sap/public/icf_info/icr_groups"
+      ],
+      [
+        "C",
+        "Identification of the HTTP port of the PAS instance’s ICM process"
+      ],
+      [
+        "D",
+        "Activation of ICF service /sap/public/ping"
+      ]
+    ],
+    "answers": [
+      "A",
+      "B"
+    ]
+  },
+  {
+    "q": "What are prerequisites to use the Software Update Manager to apply SAP Support Packages to an AS ABAP-based SAP system? Note: There are 3 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "A Stack XML file must exist."
+      ],
+      [
+        "B",
+        "The SUM archive must have been provided to the SAP Host Agent."
+      ],
+      [
+        "C",
+        "The SAP Host Agent must have been configured by SUM."
+      ],
+      [
+        "D",
+        "The SUM archive must have been extracted."
+      ],
+      [
+        "E",
+        "The latest SAP kernel patch has been applied to the SAP system."
+      ]
+    ],
+    "answers": [
+      "A",
+      "C",
+      "D"
+    ]
+  },
+  {
+    "q": "What can you configure by maintaining table HTTPURLLOC?",
+    "choices": [
+      [
+        "A",
+        "The hostname of the URL launched by transaction /UI2/FLP"
+      ],
+      [
+        "B",
+        "The URL of a local web server for user assistance resources"
+      ],
+      [
+        "C",
+        "The URL used by classic applications"
+      ],
+      [
+        "D",
+        "The path of the URL launched by transaction /UI2/FLP"
+      ]
+    ],
+    "answers": [
+      "A"
+    ]
+  },
+  {
+    "q": "In an AS ABAP-based SAP system, you need to create a user that is not enabled for dialog interaction and is subject to the validity period of passwords. Which user type do you choose?",
+    "choices": [
+      [
+        "A",
+        "Communications Data"
+      ],
+      [
+        "B",
+        "Service"
+      ],
+      [
+        "C",
+        "Reference"
+      ],
+      [
+        "D",
+        "System"
+      ]
+    ],
+    "answers": [
+      "A"
+    ]
+  },
+  {
+    "q": "Using standard transport protocol settings, after importing a transport request, which log file provides the return codes of the individual import steps? Note: These answers use the following abbreviations: year, week, quarter, SAP system ID, and a 5-digit number.",
+    "choices": [
+      [
+        "A",
+        "ALOG<YY><WW>.<SID>"
+      ],
+      [
+        "B",
+        "ULOG<YY>_<Q>"
+      ],
+      [
+        "C",
+        "SLOG<YY><WW>.<SID>"
+      ],
+      [
+        "D",
+        "<SID>E9<nnnnn>.<SID>"
+      ]
+    ],
+    "answers": [
+      "A"
+    ]
+  },
+  {
+    "q": "You are importing an SAP Support Package Stack with transaction SPAM. Which steps require SAP system downtime? Note: There are 2 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "Modification adjustment of other objects (SPAU)"
+      ],
+      [
+        "B",
+        "Import of inactive dictionary objects (DD IMPORT)"
+      ],
+      [
+        "C",
+        "Activation of dictionary objects (DD ACTIVATION)"
+      ],
+      [
+        "D",
+        "Modification adjustment of dictionary objects (SPDD)"
+      ]
+    ],
+    "answers": [
+      "A",
+      "C"
+    ]
+  },
+  {
+    "q": "You are logged onto an AS ABAP-based SAP system. What happens when you release a task of a transport request that contains changes to a program?",
+    "choices": [
+      [
+        "A",
+        "A data file and a cofile are created."
+      ],
+      [
+        "B",
+        "The object list is handed over to the transport request."
+      ],
+      [
+        "C",
+        "The repository locks are released."
+      ],
+      [
+        "D",
+        "A version is created in version management."
+      ]
+    ],
+    "answers": [
+      "B"
+    ]
+  },
+  {
+    "q": "What is the definition of a Transport Group in the Transport Management System (TMS)?",
+    "choices": [
+      [
+        "A",
+        "A collection of systems that are assigned to the same transport target group"
+      ],
+      [
+        "B",
+        "A collection of systems that share the same transport directory"
+      ],
+      [
+        "C",
+        "A collection of systems that are connected by transport routes"
+      ],
+      [
+        "D",
+        "A collection of systems that are controlled by the same transport domain controller"
+      ]
+    ],
+    "answers": [
+      "B"
+    ]
+  },
+  {
+    "q": "In an embedded deployment, which protocol is used by object pages to access the SAP S/4HANA system?",
+    "choices": [
+      [
+        "A",
+        "OData"
+      ],
+      [
+        "B",
+        "RFC"
+      ],
+      [
+        "C",
+        "DIAG"
+      ],
+      [
+        "D",
+        "InA"
+      ]
+    ],
+    "answers": [
+      "A"
+    ]
+  },
+  {
+    "q": "Which services can you stop in the SAP HANA cockpit from the SYSTEMDB Manage Services app? Note: There are 2 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "Daemon"
+      ],
+      [
+        "B",
+        "Preprocessor"
+      ],
+      [
+        "C",
+        "Index server"
+      ],
+      [
+        "D",
+        "Compile server"
+      ]
+    ],
+    "answers": [
+      "B",
+      "D"
+    ]
+  },
+  {
+    "q": "During startup, an AS Java-based SAP system generates an error. Which file contains information about manager and services?",
+    "choices": [
+      [
+        "A",
+        "dev_jstart"
+      ],
+      [
+        "B",
+        "dev_icm"
+      ],
+      [
+        "C",
+        "std_server<X>.out"
+      ],
+      [
+        "D",
+        "jvm_bootstrap.out"
+      ]
+    ],
+    "answers": [
+      "C"
+    ]
+  },
+  {
+    "q": "What are some start conditions of a background job in an AS ABAP-based SAP system? Note: There are 3 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "Defining an external command"
+      ],
+      [
+        "B",
+        "Switching the operation mode"
+      ],
+      [
+        "C",
+        "Reaching a specific date and time"
+      ],
+      [
+        "D",
+        "Triggering a background event"
+      ],
+      [
+        "E",
+        "Creating a job server group"
+      ]
+    ],
+    "answers": [
+      "D",
+      "B",
+      "C"
+    ]
+  },
+  {
+    "q": "Using standard tp settings, how does the transport strategy “Queue-Driven Transports, Mass Transports” differ from “Queue-Driven Transports, Single Transports”? Note: There are 3 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "Using the “Import Request” button causes the imported transport requests to remain in the import queue."
+      ],
+      [
+        "B",
+        "The “Import All Requests” button is available."
+      ],
+      [
+        "C",
+        "Return Code 16 is caused by an erroneous object in a transport request."
+      ],
+      [
+        "D",
+        "Return Code 8 is considered a successful import."
+      ],
+      [
+        "E",
+        "The import process can be scheduled in the background."
+      ]
+    ],
+    "answers": [
+      "A",
+      "B",
+      "D"
+    ]
+  },
+  {
+    "q": "When performing a standard SAP HANA database system installation, which users will be created or validated during that installation? Note: There are 2 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "SYSTEM"
+      ],
+      [
+        "B",
+        "SAP<SID>"
+      ],
+      [
+        "C",
+        "<sid>crypt"
+      ],
+      [
+        "D",
+        "Sapadm"
+      ]
+    ],
+    "answers": [
+      "A",
+      "D"
+    ]
+  },
+  {
+    "q": "You want to add an SAP Fiori group to a user’s SAP Fiori launchpad. To what do you have to assign the SAP Fiori group?",
+    "choices": [
+      [
+        "A",
+        "To a user group assigned to the user"
+      ],
+      [
+        "B",
+        "To a parameter ID of the user"
+      ],
+      [
+        "C",
+        "To a role assigned to the user"
+      ],
+      [
+        "D",
+        "To an authorization profile assigned to the user"
+      ]
+    ],
+    "answers": [
+      "C"
+    ]
+  },
+  {
+    "q": "When performing a local client copy, which client copy profiles are available? Note: There are 3 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "All Client-Specific Data without Change Documents"
+      ],
+      [
+        "B",
+        "Customizing including Cross-Client Customizing"
+      ],
+      [
+        "C",
+        "Application Data and User Master Data"
+      ],
+      [
+        "D",
+        "Customizing, User Master Record, and User Variants"
+      ],
+      [
+        "E",
+        "User Master Records and Authorization Profiles"
+      ]
+    ],
+    "answers": [
+      "A",
+      "D",
+      "E"
+    ]
+  },
+  {
+    "q": "Which processes can run optionally as part of ABAP SAP Central Services (ASCS)? Note: There are 2 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "RFC Gateway"
+      ],
+      [
+        "B",
+        "Message Server"
+      ],
+      [
+        "C",
+        "Enqueue Server"
+      ],
+      [
+        "D",
+        "SAP Web Dispatcher"
+      ]
+    ],
+    "answers": [
+      "A",
+      "D"
+    ]
+  },
+  {
+    "q": "In the role maintenance transaction (PFCG) of an AS ABAP-based SAP system, which step grants the authorizations of a role to a user master record?",
+    "choices": [
+      [
+        "A",
+        "Assign a user to the role"
+      ],
+      [
+        "B",
+        "Save the role"
+      ],
+      [
+        "C",
+        "Generate the profile"
+      ],
+      [
+        "D",
+        "Perform a user comparison"
+      ]
+    ],
+    "answers": [
+      "D"
+    ]
+  },
+  {
+    "q": "What is the purpose of the SAP HANA secure user store (hdbuserstore)? Note: There are 2 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "To store connection information on the SAP HANA XS advanced engine"
+      ],
+      [
+        "B",
+        "To configure an SAP HANA auto-restart for fault recovery"
+      ],
+      [
+        "C",
+        "To store connection information on the SAP HANA database client"
+      ],
+      [
+        "D",
+        "To configure fail-over support in a 3-tier scenario"
+      ]
+    ],
+    "answers": [
+      "C",
+      "D"
+    ]
+  },
+  {
+    "q": "You configure the Transport Management System (TMS) as part of the installation of an AS ABAP-based SAP system. What information can you supply for the first SAP system that uses a specific transport directory? Note: There are 3 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "The description of the AS ABAP-based SAP system"
+      ],
+      [
+        "B",
+        "The name of the Transport Domain"
+      ],
+      [
+        "C",
+        "The password of a new user that will be created"
+      ],
+      [
+        "D",
+        "The name of the Transport Group"
+      ],
+      [
+        "E",
+        "The user ID of a new user that will be created"
+      ]
+    ],
+    "answers": [
+      "A",
+      "B",
+      "C"
+    ]
+  },
+  {
+    "q": "You are running an SAP HANA database in log mode \"normal\". Under what circumstances does the database automatically execute a regular log backup? Note: There are 2 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "When the time threshold is exceeded"
+      ],
+      [
+        "B",
+        "When the log segment is full"
+      ],
+      [
+        "C",
+        "When a commit occurs"
+      ],
+      [
+        "D",
+        "When the log buffer is full"
+      ]
+    ],
+    "answers": [
+      "A",
+      "B"
+    ]
+  },
+  {
+    "q": "What is the correct parameter-replacement sequence in an AS Java-based SAP system?",
+    "choices": [
+      [
+        "A",
+        "Template custom → Instance custom → Template default → Instance default"
+      ],
+      [
+        "B",
+        "Instance default → Instance custom → Template default → Template custom"
+      ],
+      [
+        "C",
+        "Instance custom → Instance default → Template custom → Template default"
+      ],
+      [
+        "D",
+        "Template default → Instance default → Template custom → Instance custom"
+      ]
+    ],
+    "answers": [
+      "D"
+    ]
+  },
+  {
+    "q": "When you install SAP Solution Manager 7.2 AS Java, what information do you need to provide? Note: There are 2 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "The decision whether to install an SAP Gateway integrated in the SCS instance"
+      ],
+      [
+        "B",
+        "The package path to an archive for SAP JVM"
+      ],
+      [
+        "C",
+        "The package path to additional language installation media"
+      ],
+      [
+        "D",
+        "The decision to use an External ABAP System as UME Data Source"
+      ]
+    ],
+    "answers": [
+      "B",
+      "D"
+    ]
+  },
+  {
+    "q": "You want to configure the transport domain for the transport of AS Java-based SAP systems (for example SAP Enterprise Portal). Which entry type do you create for these systems in the System Overview area of the Transport Management System (transaction STMS)?",
+    "choices": [
+      [
+        "A",
+        "Virtual System"
+      ],
+      [
+        "B",
+        "External System"
+      ],
+      [
+        "C",
+        "Java Stack Configuration"
+      ],
+      [
+        "D",
+        "Non-ABAP System"
+      ]
+    ],
+    "answers": [
+      "D"
+    ]
+  },
+  {
+    "q": "Your SAP S/4HANA Server system consists of an ABAP Central Services instance, a Primary Application Server instance, and two Additional Application Server instances. How many system profile files are evaluated for this SAP system during system start?",
+    "choices": [
+      [
+        "A",
+        "9"
+      ],
+      [
+        "B",
+        "5"
+      ],
+      [
+        "C",
+        "8"
+      ],
+      [
+        "D",
+        "4"
+      ]
+    ],
+    "answers": [
+      "B"
+    ]
+  },
+  {
+    "q": "In which subdirectories of /sapmnt can you find information about startup problems of an AS Java-based SAP system? Note: There are 2 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "D <instance_no>/work"
+      ],
+      [
+        "B",
+        "J <instance_no>/work"
+      ],
+      [
+        "C",
+        "J <instance_no>/log"
+      ],
+      [
+        "D",
+        "SCS <instance_no>/work"
+      ]
+    ],
+    "answers": [
+      "C",
+      "D"
+    ]
+  },
+  {
+    "q": "How does SAP HANA encrypt the data persistence layer?",
+    "choices": [
+      [
+        "A",
+        "By row level"
+      ],
+      [
+        "B",
+        "By page level"
+      ],
+      [
+        "C",
+        "By column level"
+      ],
+      [
+        "D",
+        "By table level"
+      ]
+    ],
+    "answers": [
+      "B"
+    ]
+  },
+  {
+    "q": "In an AS ABAP-based SAP system, where is the lock table stored?",
+    "choices": [
+      [
+        "A",
+        "Main memory of the Primary Application Server instance"
+      ],
+      [
+        "B",
+        "File system of the Primary Application Server instance"
+      ],
+      [
+        "C",
+        "Main memory of the Central Services instance"
+      ],
+      [
+        "D",
+        "Database"
+      ]
+    ],
+    "answers": [
+      "C"
+    ]
+  },
+  {
+    "q": "In ABAP programs, what are features of ABAP SQL that are not available with native SQL? Note: There are 2 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "Database independence"
+      ],
+      [
+        "B",
+        "Execution without a work process"
+      ],
+      [
+        "C",
+        "Execution of ABAP programs as database procedures"
+      ],
+      [
+        "D",
+        "Use of the AS ABAP data buffer"
+      ]
+    ],
+    "answers": [
+      "A",
+      "D"
+    ]
+  },
+  {
+    "q": "How can the system database administrator disable tenant database functionalities? Note: There are 2 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "Using the hdbuserstore tool"
+      ],
+      [
+        "B",
+        "Using the Manage Restricted Features app"
+      ],
+      [
+        "C",
+        "Using the Manage Database Configuration app"
+      ],
+      [
+        "D",
+        "Using the resident hdblcm tool"
+      ]
+    ],
+    "answers": [
+      "B",
+      "C"
+    ]
+  },
+  {
+    "q": "When using the Java Startup and Control Framework to shut down an AS Java-based SAP system, which component actually stops the server process(es)?",
+    "choices": [
+      [
+        "A",
+        "Instance Controller"
+      ],
+      [
+        "B",
+        "Database"
+      ],
+      [
+        "C",
+        "ICM"
+      ],
+      [
+        "D",
+        "Sapstartsrv"
+      ]
+    ],
+    "answers": [
+      "D"
+    ]
+  },
+  {
+    "q": "Which file-system locations do you need to specify when installing the SAP HANA multi-host database system using the default settings? Note: There are 2 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "/usr/sap/hostctrl"
+      ],
+      [
+        "B",
+        "/hana/shared"
+      ],
+      [
+        "C",
+        "/hana/log/<SID>"
+      ],
+      [
+        "D",
+        "/usr/sap/<SID>"
+      ]
+    ],
+    "answers": [
+      "B",
+      "C"
+    ]
+  },
+  {
+    "q": "You want to configure the TMS QA Approval procedure for an AS ABAP-based system landscape. Which approval steps can you choose? Note: There are 3 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "To be approved by request owner"
+      ],
+      [
+        "B",
+        "To be approved by developer"
+      ],
+      [
+        "C",
+        "To be approved by system administration"
+      ],
+      [
+        "D",
+        "To be approved by project manager"
+      ],
+      [
+        "E",
+        "To be approved by department"
+      ]
+    ],
+    "answers": [
+      "A",
+      "C",
+      "E"
+    ]
+  },
+  {
+    "q": "For an SAP HANA Tailored Datacenter Integration (TDI) approach, what is the additional disk-space factor required during delta-merge operations?",
+    "choices": [
+      [
+        "A",
+        "2"
+      ],
+      [
+        "B",
+        "3"
+      ],
+      [
+        "C",
+        "1.6"
+      ],
+      [
+        "D",
+        "1.2"
+      ]
+    ],
+    "answers": [
+      "D"
+    ]
+  },
+  {
+    "q": "You are configuring outbound e-mails for an AS ABAP-based SAP system. What can you use to set the default domain?",
+    "choices": [
+      [
+        "A",
+        "Report RSADRCK7"
+      ],
+      [
+        "B",
+        "Profile parameter is/SMTP/virt_host_<x>"
+      ],
+      [
+        "C",
+        "Transaction SCOT"
+      ],
+      [
+        "D",
+        "File DOMAIN.CFG"
+      ]
+    ],
+    "answers": [
+      "C"
+    ]
+  },
+  {
+    "q": "In which situations can you resume the failed recovery of your productive SAP HANA tenant database? Note: There are 2 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "An aborted recovery of the configuration files"
+      ],
+      [
+        "B",
+        "An aborted recovery of a complete data backup"
+      ],
+      [
+        "C",
+        "An aborted recovery of a delta data backup"
+      ],
+      [
+        "D",
+        "An aborted recovery of a log backup"
+      ]
+    ],
+    "answers": [
+      "C",
+      "D"
+    ]
+  },
+  {
+    "q": "Which characteristics describe an SAP HANA Multitenant Database Container (MDC) system? Note: There are 3 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "The name server provides index-server functionality for the system database."
+      ],
+      [
+        "B",
+        "Database isolation increases tenant separation at the operating-system level."
+      ],
+      [
+        "C",
+        "Each tenant database runs its own compile and preprocessor servers."
+      ],
+      [
+        "D",
+        "The name server owns information about the location of tables and partitions."
+      ],
+      [
+        "E",
+        "An MDC system is identified by a single System ID (SID)."
+      ]
+    ],
+    "answers": [
+      "A",
+      "B",
+      "E"
+    ]
+  },
+  {
+    "q": "Which tasks can you perform when using the SAP HANA Database Lifecycle Manager (HDBLCM) from the SAP HANA installation media? Note: There are 2 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "Rename the SAP HANA database system"
+      ],
+      [
+        "B",
+        "Extract the SAP HANA database system components"
+      ],
+      [
+        "C",
+        "Uninstall the SAP HANA database system and its components"
+      ],
+      [
+        "D",
+        "Update the SAP HANA database system and its components"
+      ]
+    ],
+    "answers": [
+      "B",
+      "D"
+    ]
+  },
+  {
+    "q": "Which of the following protocols is SAP’s RFC protocol based on? Note: There are 2 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "OLE"
+      ],
+      [
+        "B",
+        "TCP/IP"
+      ],
+      [
+        "C",
+        "CPI-C"
+      ],
+      [
+        "D",
+        "OData"
+      ]
+    ],
+    "answers": [
+      "B",
+      "C"
+    ]
+  },
+  {
+    "q": "You are using a standard three-system landscape (DEV, QAS and PRD). When will a change of a repository object in the QAS system be treated as a correction?",
+    "choices": [
+      [
+        "A",
+        "If the object was created in DEV and transported to QAS via a transport of copies."
+      ],
+      [
+        "B",
+        "If the object’s name is in the SAP namespace."
+      ],
+      [
+        "C",
+        "If the object was created in DEV and transported to QAS via a workbench request."
+      ],
+      [
+        "D",
+        "If the original system of the object is QAS."
+      ]
+    ],
+    "answers": [
+      "D"
+    ]
+  },
+  {
+    "q": "You are installing an SAP S/4HANA Server 1909 system, using s4xhost as the application-server host and haxhost as the database host. Which actions can Software Provisioning Manager (SWPM) perform? Note: There are 3 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "Set database import parameters for the database running on haxhost"
+      ],
+      [
+        "B",
+        "Copy the database installation media from s4xhost to haxhost"
+      ],
+      [
+        "C",
+        "Install the Central Services instance on s4xhost"
+      ],
+      [
+        "D",
+        "Install the database on haxhost"
+      ],
+      [
+        "E",
+        "Copy the database backup media from s4xhost to haxhost"
+      ]
+    ],
+    "answers": [
+      "A",
+      "C",
+      "D"
+    ]
+  },
+  {
+    "q": "Which parameters are mandatory when using the HDBLCM tool to install the SAP HANA database system in batch mode? Note: There are 2 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "Installation path"
+      ],
+      [
+        "B",
+        "SAP HANA System ID (SID)"
+      ],
+      [
+        "C",
+        "Data and log path"
+      ],
+      [
+        "D",
+        "Password of user sapadm"
+      ]
+    ],
+    "answers": [
+      "B",
+      "D"
+    ]
+  },
+  {
+    "q": "The SAP Fiori launchpad is working for your users. How can you enable access to the SAP Easy Access menu for them in the App Finder? Note: There are 2 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "By providing an HTTP destination type H named FIORI_CLASSICUI_HTTPS (transaction SM59)"
+      ],
+      [
+        "B",
+        "By applying the correct settings in the SAP Fiori launchpad configuration (transaction /UI2/FLP_SYS_CONF or /UI2/FLP_CUS_CONF)"
+      ],
+      [
+        "C",
+        "By assigning the correct target mappings shipped via catalog /UI2/CLASSICAL_GUI_MENU"
+      ],
+      [
+        "D",
+        "By assigning the authorization to start transaction SEARCH_SAP_MENU"
+      ]
+    ],
+    "answers": [
+      "B",
+      "C"
+    ]
+  },
+  {
+    "q": "You are updating an AS Java-based SAP system. Which actions can Software Update Manager execute? Note: There are 2 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "Lock the development environment"
+      ],
+      [
+        "B",
+        "Update without using a stack configuration file (stack XML file)"
+      ],
+      [
+        "C",
+        "Update SAP Host Agent"
+      ],
+      [
+        "D",
+        "Check the archives’ authenticity"
+      ]
+    ],
+    "answers": [
+      "B",
+      "D"
+    ]
+  },
+  {
+    "q": "Which of the following tools are used when importing a transport request? Note: There are 3 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "RDDIMPDP"
+      ],
+      [
+        "B",
+        "R3load"
+      ],
+      [
+        "C",
+        "tp"
+      ],
+      [
+        "D",
+        "RDDNEWPP"
+      ],
+      [
+        "E",
+        "R3trans"
+      ]
+    ],
+    "answers": [
+      "A",
+      "C",
+      "E"
+    ]
+  },
+  {
+    "q": "You want to set up a printer locally on a Microsoft Windows-based AS ABAP. Which host spool access method must you use?",
+    "choices": [
+      [
+        "A",
+        "L"
+      ],
+      [
+        "B",
+        "U"
+      ],
+      [
+        "C",
+        "G"
+      ],
+      [
+        "D",
+        "C"
+      ]
+    ],
+    "answers": [
+      "D"
+    ]
+  },
+  {
+    "q": "You have configured an SAP Web Dispatcher and set: wdisp/ssl_encrypt=2 icm/server_port_<xx>=PROT=HTTP Which communication channels does this establish?",
+    "choices": [
+      [
+        "A",
+        "HTTP between the client and SAP Web Dispatcher; HTTPS between SAP Web Dispatcher and the SAP system"
+      ],
+      [
+        "B",
+        "HTTPS between the client and SAP Web Dispatcher; HTTP between SAP Web Dispatcher and the SAP system"
+      ],
+      [
+        "C",
+        "HTTP between the client and SAP Web Dispatcher; HTTP between SAP Web Dispatcher and the SAP system"
+      ],
+      [
+        "D",
+        "HTTPS between the client and SAP Web Dispatcher; HTTPS between SAP Web Dispatcher and the SAP system"
+      ]
+    ],
+    "answers": [
+      "A"
+    ]
+  },
+  {
+    "q": "Which tools can be used to create SAP Fiori catalogs? Note: There are 2 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "SAP Fiori Launchpad Designer (/UI2/FLPD_CUST)"
+      ],
+      [
+        "B",
+        "SAP Fiori Launchpad Content Aggregator (/UI2/FLPCA)"
+      ],
+      [
+        "C",
+        "SAP Fiori Launchpad Settings (/UI2/FLP_CUS_CONF)"
+      ],
+      [
+        "D",
+        "SAP Fiori Launchpad Content Manager (/UI2/FLPCM_CUST)"
+      ],
+      [
+        "E",
+        "SAP Fiori Launchpad Application Manager (/UI2/FLPAM)"
+      ]
+    ],
+    "answers": [
+      "A",
+      "B",
+      "D"
+    ]
+  },
+  {
+    "q": "You are working in an AS ABAP-based SAP system that runs on Linux. Where is the spool data stored when you use the value IGI for the profile parameter rspo/store_location?",
+    "choices": [
+      [
+        "A",
+        "/usr/sap/<SID>/D/work"
+      ],
+      [
+        "B",
+        "/usr/sap/<SID>/sys/global"
+      ],
+      [
+        "C",
+        "/usr/sap/<SID>/D/data"
+      ],
+      [
+        "D",
+        "/usr/sap/<SID>/sys/profile"
+      ]
+    ],
+    "answers": [
+      "B"
+    ]
+  },
+  {
+    "q": "During the installation of SAP Solution Manager AS ABAP 7.2, which of the following user IDs does SAPinst suggest for SAP Solution Manager AS Java 7.2? Note: There are 2 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "J2EE_ADMIN"
+      ],
+      [
+        "B",
+        "SAP*"
+      ],
+      [
+        "C",
+        "SAPJSF"
+      ],
+      [
+        "D",
+        "Administrator"
+      ]
+    ],
+    "answers": [
+      "A",
+      "C"
+    ]
+  },
+  {
+    "q": "For AS ABAP-based SAP systems, you can use Software Update Manager to update which of the following? Note: There are 2 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "Database system"
+      ],
+      [
+        "B",
+        "Software component SAP_BASIS"
+      ],
+      [
+        "C",
+        "Implemented SAP Notes"
+      ],
+      [
+        "D",
+        "SAP kernel"
+      ]
+    ],
+    "answers": [
+      "B",
+      "D"
+    ]
+  },
+  {
+    "q": "During the import of a transport request, which tools write log files to the tmp subdirectory of the transport directory? Note: There are 3 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "RDDMNTAB"
+      ],
+      [
+        "B",
+        "R3load"
+      ],
+      [
+        "C",
+        "R3trans"
+      ],
+      [
+        "D",
+        "RDDMASGL"
+      ],
+      [
+        "E",
+        "tp"
+      ]
+    ],
+    "answers": [
+      "A",
+      "C",
+      "D"
+    ]
+  },
+  {
+    "q": "You are running an AS ABAP-based SAP system. Which parts does the Internet Server Cache (ISC) of the ICM process consist of? Note: There are 3 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "Browser cache"
+      ],
+      [
+        "B",
+        "CPU cache"
+      ],
+      [
+        "C",
+        "Disk cache"
+      ],
+      [
+        "D",
+        "UFO cache"
+      ],
+      [
+        "E",
+        "Memory cache"
+      ]
+    ],
+    "answers": [
+      "C",
+      "D",
+      "E"
+    ]
+  },
+  {
+    "q": "How can you register multiple SAP Gateway services simultaneously? Note: There are 2 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "Using task list SAP_GATEWAY_ACTIVATE_ODATA_SERV"
+      ],
+      [
+        "B",
+        "Using task list SAP_GATEWAY_BASIC_CONFIG"
+      ],
+      [
+        "C",
+        "Using transaction /IWFND/GW_CLIENT"
+      ],
+      [
+        "D",
+        "Using transaction /IWFND/MAINT_SERVICE"
+      ]
+    ],
+    "answers": [
+      "A",
+      "D"
+    ]
+  },
+  {
+    "q": "You are installing a Primary Application Server and a Central Services instance for an AS Java-based SAP system. What is the minimum number of Java server nodes you must configure?",
+    "choices": [
+      [
+        "A",
+        "4"
+      ],
+      [
+        "B",
+        "2"
+      ],
+      [
+        "C",
+        "0"
+      ],
+      [
+        "D",
+        "1"
+      ]
+    ],
+    "answers": [
+      "D"
+    ]
+  },
+  {
+    "q": "Which work-process types can create spool requests? Note: There are 2 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "Dialog"
+      ],
+      [
+        "B",
+        "Update"
+      ],
+      [
+        "C",
+        "Spool"
+      ],
+      [
+        "D",
+        "Background"
+      ]
+    ],
+    "answers": [
+      "A",
+      "B"
+    ]
+  },
+  {
+    "q": "Which instances have processes that establish a connection to the database of an SAP system? Note: There are 2 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "Enqueue Replication Server"
+      ],
+      [
+        "B",
+        "Primary Application Server"
+      ],
+      [
+        "C",
+        "Additional Application Server"
+      ],
+      [
+        "D",
+        "Central Services"
+      ]
+    ],
+    "answers": [
+      "B",
+      "C"
+    ]
+  },
+  {
+    "q": "Which changes in an AS Java-based SAP system require a restart of the affected server process(es) before they take effect? Note: There are 2 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "A change of a manager property value"
+      ],
+      [
+        "B",
+        "A change of the key phrase"
+      ],
+      [
+        "C",
+        "A change of the UME data source"
+      ],
+      [
+        "D",
+        "A change of a service property value"
+      ]
+    ],
+    "answers": [
+      "B",
+      "C"
+    ]
+  },
+  {
+    "q": "What are start conditions of a background job in an AS ABAP-based SAP system? Note: There are 2 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "Starting of a dynamic work process"
+      ],
+      [
+        "B",
+        "Locking user DDIC in client 000"
+      ],
+      [
+        "C",
+        "Ending of a predecessor job"
+      ],
+      [
+        "D",
+        "Reaching a specific date and time"
+      ]
+    ],
+    "answers": [
+      "C",
+      "D"
+    ]
+  },
+  {
+    "q": "You have created a task list (STC01) in your development system. What can you use to make the task list available in the quality-assurance system?",
+    "choices": [
+      [
+        "A",
+        "A workbench request"
+      ],
+      [
+        "B",
+        "A customizing request"
+      ],
+      [
+        "C",
+        "File download and upload"
+      ],
+      [
+        "D",
+        "An RFC-based distribution"
+      ]
+    ],
+    "answers": [
+      "C"
+    ]
+  },
+  {
+    "q": "In an AS ABAP-based SAP system, what can you use to change the value of a dynamically switchable parameter at runtime?",
+    "choices": [
+      [
+        "A",
+        "Report RSPFPAR"
+      ],
+      [
+        "B",
+        "Transaction Edit Profile Parameters (RZ11)"
+      ],
+      [
+        "C",
+        "Transaction Edit Profiles (RZ10)"
+      ],
+      [
+        "D",
+        "Command-line tool sappfpar"
+      ]
+    ],
+    "answers": [
+      "B"
+    ]
+  },
+  {
+    "q": "You have restarted the Primary Application Server instance. After the restart, changes will take effect for which profiles? Note: There are 2 correct answers to this question.",
+    "choices": [
+      [
+        "A",
+        "Central Services instance profile"
+      ],
+      [
+        "B",
+        "Default profile"
+      ],
+      [
+        "C",
+        "Additional Application Server instance profile"
+      ],
+      [
+        "D",
+        "Primary Application Server instance profile"
+      ]
+    ],
+    "answers": [
+      "C",
+      "D"
+    ]
+  }
+]
