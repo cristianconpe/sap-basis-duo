@@ -141,7 +141,6 @@ const TopBar = ({ seen, correct, streak, lives, total, currentUser, onChangeUser
           <div className="ml-2 flex items-center gap-3 text-gray-600 dark:text-slate-300">
             <div>Seen: {seen}</div>
             <div>✔️ {correct}</div>
-            <div>{acc}%</div>
           </div>
         </div>
         <div className="flex items-center gap-3">
