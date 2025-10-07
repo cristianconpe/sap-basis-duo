@@ -2,6 +2,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import defaultDeck from "./sap_basis_duo_questions.json";
 
+// 🔗 Supabase helpers (añadido)
+import {
+  getLeaderboardByPoints,
+  getLeaderboardByStreak,
+  updateRecordIfBetter,
+} from "./db";
+
 /* ================= Users & Storage ================= */
 const USERS = ["Cris", "Jose", "Adrian", "Sebas", "Enrique", "Isaac"];
 const USERS_KEY = "sap_basis_duo_users_v2";
@@ -167,7 +174,7 @@ const TopBar = ({ seen, correct, streak, lives, total, currentUser, onChangeUser
   );
 };
 
-// two leaderboards (best points record & best streak)
+// two leaderboards (local records)
 const Leaderboard = ({ allUsers }) => {
   const list = Object.entries(allUsers).map(([name, s]) => ({ name, ...s }));
   const topBestPoints = [...list].sort((a, b) => b.bestPoints - a.bestPoints).slice(0, 6);
@@ -192,8 +199,34 @@ const Leaderboard = ({ allUsers }) => {
 
   return (
     <div className="grid md:grid-cols-2 gap-4 mt-8">
-      <Card title="🏆 Top Best Points (Record)" items={topBestPoints} valueKey="bestPoints" valueClass="text-sky-600 dark:text-sky-300" />
-      <Card title="🔥 Top Best Streak" items={topBestStreak} valueKey="bestStreak" valueClass="text-amber-600 dark:text-amber-300" />
+      <Card title="🏆 Top Best Points (Local)" items={topBestPoints} valueKey="bestPoints" valueClass="text-sky-600 dark:text-sky-300" />
+      <Card title="🔥 Top Best Streak (Local)" items={topBestStreak} valueKey="bestStreak" valueClass="text-amber-600 dark:text-amber-300" />
+    </div>
+  );
+};
+
+// NEW: global leaderboards (Supabase)
+const CloudLeaderboards = ({ topPoints, topStreaks }) => {
+  const Card = ({ title, rows, field, valueClass }) => (
+    <div className="rounded-2xl border border-gray-200 bg-white p-4 dark:bg-slate-900 dark:border-slate-700">
+      <h3 className="font-semibold mb-3 text-gray-800 dark:text-slate-100">{title}</h3>
+      <ul className="space-y-2">
+        {rows.map((row, idx) => (
+          <li key={`${row.name}-${idx}`} className="flex justify-between text-sm">
+            <div className="flex items-center gap-2">
+              <span className="w-6 text-gray-500">{idx + 1}.</span>
+              <span className="font-medium">{row.name}</span>
+            </div>
+            <span className={`font-semibold ${valueClass}`}>{row[field]}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+  return (
+    <div className="grid md:grid-cols-2 gap-4 mt-8">
+      <Card title="🌐 Global Best Points" rows={topPoints} field="best_points" valueClass="text-sky-600 dark:text-sky-300" />
+      <Card title="🌐 Global Best Streaks" rows={topStreaks} field="best_streak" valueClass="text-amber-600 dark:text-amber-300" />
     </div>
   );
 };
@@ -214,6 +247,23 @@ export default function App() {
   const [lostAnim, setLostAnim] = useState(false);
   const prevHearts = useRef(null);
 
+  // 🔽 Global leaderboards (Supabase) — añadido
+  const [topPoints, setTopPoints] = useState([]);
+  const [topStreaks, setTopStreaks] = useState([]);
+
+  async function refreshLeaderboards() {
+    try {
+      const [tp, ts] = await Promise.all([
+        getLeaderboardByPoints(10),
+        getLeaderboardByStreak(10),
+      ]);
+      setTopPoints(tp || []);
+      setTopStreaks(ts || []);
+    } catch (e) {
+      console.warn("Leaderboard fetch failed:", e?.message || e);
+    }
+  }
+
   // active user stats
   const stats = getUserStats(allUsers, currentUser);
   const { points, bestPoints, seen, correct, streak, bestStreak, hearts } = stats;
@@ -227,6 +277,11 @@ export default function App() {
     const initial = Array.isArray(defaultDeck) ? [...defaultDeck] : [];
     shuffle(initial);
     setDeck(initial);
+  }, []);
+
+  // Carga leaderboards globales al montar
+  useEffect(() => {
+    refreshLeaderboards();
   }, []);
 
   function shuffle(arr) {
@@ -298,8 +353,22 @@ export default function App() {
           const next = { ...prev };
           const s = { ...getUserStats(prev, currentUser) };
 
-          // update personal record
+          // cache run values BEFORE reset
+          const runPoints = s.points || 0;
+          const runBestStreak = s.bestStreak || 0;
+
+          // update personal record (local)
           s.bestPoints = Math.max(s.bestPoints || 0, s.points || 0);
+
+          // 🔗 SUBE récord a Supabase (no cambia tu lógica local)
+          (async () => {
+            try {
+              await updateRecordIfBetter(currentUser, runPoints, runBestStreak);
+              await refreshLeaderboards();
+            } catch (e) {
+              console.warn("Supabase update failed:", e?.message || e);
+            }
+          })();
 
           // reset run
           s.points = 0;
@@ -443,8 +512,11 @@ export default function App() {
           )}
         </div>
 
-        {/* Leaderboard (records only) */}
+        {/* Leaderboard (records locales) */}
         <Leaderboard allUsers={allUsers} />
+
+        {/* Leaderboards globales (Supabase) — añadido */}
+        <CloudLeaderboards topPoints={topPoints} topStreaks={topStreaks} />
       </div>
     </div>
   );
