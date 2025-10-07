@@ -2,11 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import defaultDeck from "./sap_basis_duo_questions.json";
 
-<<<<<<< HEAD
-// 🔗 Supabase helpers (añadido)
-=======
 // 🔗 Supabase helpers
->>>>>>> 80f9efa (Add shuffle for 25 random questions and round reset)
 import {
   getLeaderboardByPoints,
   getLeaderboardByStreak,
@@ -177,19 +173,9 @@ const TopBar = ({ seen, correct, streak, lives, total, currentUser, onChangeUser
   );
 };
 
-<<<<<<< HEAD
-// two leaderboards (local records)
-const Leaderboard = ({ allUsers }) => {
-  const list = Object.entries(allUsers).map(([name, s]) => ({ name, ...s }));
-  const topBestPoints = [...list].sort((a, b) => b.bestPoints - a.bestPoints).slice(0, 6);
-  const topBestStreak = [...list].sort((a, b) => b.bestStreak - a.bestStreak).slice(0, 6);
-
-  const Card = ({ title, items, valueKey, valueClass }) => (
-=======
 // 🌐 Global leaderboards (Supabase)
 const CloudLeaderboards = ({ topPoints, topStreaks }) => {
   const Card = ({ title, rows, field, valueClass }) => (
->>>>>>> 80f9efa (Add shuffle for 25 random questions and round reset)
     <div className="rounded-2xl border border-gray-200 bg-white p-4 dark:bg-slate-900 dark:border-slate-700">
       <h3 className="font-semibold mb-3 text-gray-800 dark:text-slate-100">{title}</h3>
       <ul className="space-y-2">
@@ -207,35 +193,6 @@ const CloudLeaderboards = ({ topPoints, topStreaks }) => {
   );
   return (
     <div className="grid md:grid-cols-2 gap-4 mt-8">
-<<<<<<< HEAD
-      <Card title="🏆 Top Best Points (Local)" items={topBestPoints} valueKey="bestPoints" valueClass="text-sky-600 dark:text-sky-300" />
-      <Card title="🔥 Top Best Streak (Local)" items={topBestStreak} valueKey="bestStreak" valueClass="text-amber-600 dark:text-amber-300" />
-    </div>
-  );
-};
-
-// NEW: global leaderboards (Supabase)
-const CloudLeaderboards = ({ topPoints, topStreaks }) => {
-  const Card = ({ title, rows, field, valueClass }) => (
-    <div className="rounded-2xl border border-gray-200 bg-white p-4 dark:bg-slate-900 dark:border-slate-700">
-      <h3 className="font-semibold mb-3 text-gray-800 dark:text-slate-100">{title}</h3>
-      <ul className="space-y-2">
-        {rows.map((row, idx) => (
-          <li key={`${row.name}-${idx}`} className="flex justify-between text-sm">
-            <div className="flex items-center gap-2">
-              <span className="w-6 text-gray-500">{idx + 1}.</span>
-              <span className="font-medium">{row.name}</span>
-            </div>
-            <span className={`font-semibold ${valueClass}`}>{row[field]}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-  return (
-    <div className="grid md:grid-cols-2 gap-4 mt-8">
-=======
->>>>>>> 80f9efa (Add shuffle for 25 random questions and round reset)
       <Card title="🌐 Global Best Points" rows={topPoints} field="best_points" valueClass="text-sky-600 dark:text-sky-300" />
       <Card title="🌐 Global Best Streaks" rows={topStreaks} field="best_streak" valueClass="text-amber-600 dark:text-amber-300" />
     </div>
@@ -258,24 +215,13 @@ export default function App() {
   const [lostAnim, setLostAnim] = useState(false);
   const prevHearts = useRef(null);
 
-<<<<<<< HEAD
-  // 🔽 Global leaderboards (Supabase) — añadido
-=======
   // 🔽 Global leaderboards (Supabase)
->>>>>>> 80f9efa (Add shuffle for 25 random questions and round reset)
   const [topPoints, setTopPoints] = useState([]);
   const [topStreaks, setTopStreaks] = useState([]);
 
   async function refreshLeaderboards() {
     try {
-<<<<<<< HEAD
-      const [tp, ts] = await Promise.all([
-        getLeaderboardByPoints(10),
-        getLeaderboardByStreak(10),
-      ]);
-=======
       const [tp, ts] = await Promise.all([getLeaderboardByPoints(10), getLeaderboardByStreak(10)]);
->>>>>>> 80f9efa (Add shuffle for 25 random questions and round reset)
       setTopPoints(tp || []);
       setTopStreaks(ts || []);
     } catch (e) {
@@ -283,11 +229,7 @@ export default function App() {
     }
   }
 
-<<<<<<< HEAD
-  // active user stats
-=======
   // Stats del usuario activo
->>>>>>> 80f9efa (Add shuffle for 25 random questions and round reset)
   const stats = getUserStats(allUsers, currentUser);
   const { points, bestPoints, seen, correct, streak, bestStreak, hearts } = stats;
 
@@ -296,30 +238,12 @@ export default function App() {
   const isMulti = answers.length > 1;
   const maxSelectable = answers.length || 1;
 
-<<<<<<< HEAD
-  useEffect(() => {
-    const initial = Array.isArray(defaultDeck) ? [...defaultDeck] : [];
-    shuffle(initial);
-    setDeck(initial);
-  }, []);
-
-  // Carga leaderboards globales al montar
-  useEffect(() => {
-    refreshLeaderboards();
-  }, []);
-
-  function shuffle(arr) {
-    for (let j = arr.length - 1; j > 0; j--) {
-      const k = Math.floor(Math.random() * (j + 1));
-      [arr[j], arr[k]] = [arr[k], arr[j]];
-=======
   // --------- helpers de ronda 25 ---------
   function getRandomDeck() {
     const arr = Array.isArray(defaultDeck) ? [...defaultDeck] : [];
     for (let k = arr.length - 1; k > 0; k--) {
       const j = Math.floor(Math.random() * (k + 1));
       [arr[k], arr[j]] = [arr[j], arr[k]];
->>>>>>> 80f9efa (Add shuffle for 25 random questions and round reset)
     }
     return arr.slice(0, 25); // 25 preguntas por ronda
   }
@@ -399,16 +323,6 @@ export default function App() {
           const next = { ...prev };
           const s = { ...getUserStats(prev, currentUser) };
 
-<<<<<<< HEAD
-          // cache run values BEFORE reset
-          const runPoints = s.points || 0;
-          const runBestStreak = s.bestStreak || 0;
-
-          // update personal record (local)
-          s.bestPoints = Math.max(s.bestPoints || 0, s.points || 0);
-
-          // 🔗 SUBE récord a Supabase (no cambia tu lógica local)
-=======
           const runPoints = s.points || 0;
           const runBestStreak = s.bestStreak || 0;
 
@@ -416,7 +330,6 @@ export default function App() {
           s.bestPoints = Math.max(s.bestPoints || 0, s.points || 0);
 
           // 🔗 récord global (Supabase)
->>>>>>> 80f9efa (Add shuffle for 25 random questions and round reset)
           (async () => {
             try {
               await updateRecordIfBetter(currentUser, runPoints, runBestStreak);
@@ -426,11 +339,7 @@ export default function App() {
             }
           })();
 
-<<<<<<< HEAD
-          // reset run
-=======
           // reset del run
->>>>>>> 80f9efa (Add shuffle for 25 random questions and round reset)
           s.points = 0;
           s.seen = 0;
           s.correct = 0;
@@ -578,14 +487,7 @@ export default function App() {
           )}
         </div>
 
-<<<<<<< HEAD
-        {/* Leaderboard (records locales) */}
-        <Leaderboard allUsers={allUsers} />
-
-        {/* Leaderboards globales (Supabase) — añadido */}
-=======
         {/* 🌐 Global Leaderboards (Supabase) */}
->>>>>>> 80f9efa (Add shuffle for 25 random questions and round reset)
         <CloudLeaderboards topPoints={topPoints} topStreaks={topStreaks} />
       </div>
     </div>
