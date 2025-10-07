@@ -1,4 +1,4 @@
-// App.jsx — Duolingo-style quiz (3 lives, global leaderboards, 25-question rounds)
+// App.jsx — Menu + Game Screen (3 lives, global leaderboards, 25-question rounds, game modes)
 import { useEffect, useRef, useState } from "react";
 import defaultDeck from "./sap_basis_duo_questions.json";
 
@@ -71,6 +71,14 @@ function setUserStats(all, name, stats) {
   saveAllUsers(all);
 }
 
+/* ================= Game Modes ================= */
+const MODES = {
+  CLASSIC: "classic",
+  TIME: "time",
+  PRACTICE: "practice",
+};
+const QUESTION_TIME = 10; // seconds (Time Attack)
+
 /* ================= UI Bits ================= */
 const Pill = ({ letter, text, active, correct, wrong, onClick, disabled }) => (
   <button
@@ -134,7 +142,18 @@ const Hearts = ({ lives, maxLives = 3, lostAnim }) => (
 );
 
 // Top bar minimal (móvil)
-const TopBar = ({ seen, correct, streak, lives, total, currentUser, onChangeUser, lostAnim }) => {
+const TopBar = ({
+  seen,
+  correct,
+  streak,
+  lives,
+  total,
+  currentUser,
+  onChangeUser,
+  lostAnim,
+  gameMode,
+  secondsLeft,
+}) => {
   const progress = total ? Math.round((seen / total) * 100) : 0;
   return (
     <div className="flex flex-col gap-2">
@@ -148,6 +167,11 @@ const TopBar = ({ seen, correct, streak, lives, total, currentUser, onChangeUser
             <div>Seen: {seen}</div>
             <div>✔️ {correct}</div>
           </div>
+          {gameMode === MODES.TIME && (
+            <div className="ml-3 text-sm font-mono px-2 py-1 rounded bg-slate-800 border border-slate-700">
+              ⏱ {secondsLeft}s
+            </div>
+          )}
         </div>
         <div className="flex items-center gap-3">
           <select
@@ -191,7 +215,7 @@ const CloudLeaderboards = ({ topPoints, topStreaks }) => {
       </ul>
     </div>
   );
-  
+
   return (
     <div className="grid md:grid-cols-2 gap-4 mt-8">
       <Card title="🏆 Top Best Points" rows={topPoints} field="best_points" valueClass="text-sky-600 dark:text-sky-300" />
@@ -204,21 +228,62 @@ const CloudLeaderboards = ({ topPoints, topStreaks }) => {
 export default function App() {
   const MAX_LIVES = 3;
 
-  const [deck, setDeck] = useState([]);
-  const [i, setI] = useState(0);
+  // ---- Menu vs Game ----
+  const [screen, setScreen] = useState("menu"); // "menu" | "game"
 
-  const [chosen, setChosen] = useState(new Set());
-  const [phase, setPhase] = useState("answer"); // answer | review
-
+  // ---- Persistent user store ----
   const [allUsers, setAllUsers] = useState(loadAllUsers());
   const [currentUser, setCurrentUser] = useState(USERS[0]);
+
+  // ---- Leaderboards (cloud) ----
+  const [topPoints, setTopPoints] = useState([]);
+  const [topStreaks, setTopStreaks] = useState([]);
+
+  // ---- Game state ----
+  const [deck, setDeck] = useState([]);
+  const [i, setI] = useState(0);
+  const [chosen, setChosen] = useState(new Set());
+  const [phase, setPhase] = useState("answer"); // answer | review
 
   const [lostAnim, setLostAnim] = useState(false);
   const prevHearts = useRef(null);
 
-  // 🔽 Global leaderboards (Supabase)
-  const [topPoints, setTopPoints] = useState([]);
-  const [topStreaks, setTopStreaks] = useState([]);
+  // Game mode
+  const [gameMode, setGameMode] = useState(MODES.CLASSIC); // selected in menu
+  const [secondsLeft, setSecondsLeft] = useState(QUESTION_TIME);
+  const [roundActive, setRoundActive] = useState(false);
+
+  // Current user stats
+  const stats = getUserStats(allUsers, currentUser);
+  const { points, bestPoints, seen, correct, streak, bestStreak, hearts } = stats;
+
+  // Current question
+  const cur = deck[i];
+  const answers = cur?.answers || [];
+  const isMulti = answers.length > 1;
+  const maxSelectable = answers.length || 1;
+
+  // ---------- Helpers ----------
+  function getRandomDeck() {
+    const arr = Array.isArray(defaultDeck) ? [...defaultDeck] : [];
+    for (let k = arr.length - 1; k > 0; k--) {
+      const j = Math.floor(Math.random() * (k + 1));
+      [arr[k], arr[j]] = [arr[j], arr[k]];
+    }
+    return arr.slice(0, 25); // 25 random questions per round
+  }
+
+  function resetRunAndDeck(nextMode = gameMode) {
+    setGameMode(nextMode);
+    setChosen(new Set());
+    setPhase("answer");
+    setI(0);
+    setDeck(getRandomDeck());
+    setRoundActive(true);
+    if (nextMode === MODES.TIME) {
+      setSecondsLeft(QUESTION_TIME);
+    }
+  }
 
   async function refreshLeaderboards() {
     try {
@@ -230,38 +295,6 @@ export default function App() {
     }
   }
 
-  // Stats del usuario activo
-  const stats = getUserStats(allUsers, currentUser);
-  const { points, bestPoints, seen, correct, streak, bestStreak, hearts } = stats;
-
-  const cur = deck[i];
-  const answers = cur?.answers || [];
-  const isMulti = answers.length > 1;
-  const maxSelectable = answers.length || 1;
-
-  // --------- helpers de ronda 25 ---------
-  function getRandomDeck() {
-    const arr = Array.isArray(defaultDeck) ? [...defaultDeck] : [];
-    for (let k = arr.length - 1; k > 0; k--) {
-      const j = Math.floor(Math.random() * (k + 1));
-      [arr[k], arr[j]] = [arr[j], arr[k]];
-    }
-    return arr.slice(0, 25); // 25 preguntas por ronda
-  }
-
-  function resetRunAndDeck() {
-    setChosen(new Set());
-    setPhase("answer");
-    setI(0);
-    setDeck(getRandomDeck());
-  }
-  // ---------------------------------------
-
-  useEffect(() => {
-    resetRunAndDeck();         // carga 25 aleatorias al inicio
-    refreshLeaderboards();     // carga leaderboards globales
-  }, []);
-
   function updateUser(mutator) {
     setAllUsers((prev) => {
       const next = { ...prev };
@@ -271,8 +304,14 @@ export default function App() {
       return next;
     });
   }
+  // ----------------------------
 
-  // animación de corazón roto al perder vida
+  // Load cloud leaderboards once
+  useEffect(() => {
+    refreshLeaderboards();
+  }, []);
+
+  // Broken-heart animation
   useEffect(() => {
     if (prevHearts.current !== null && hearts < prevHearts.current) {
       setLostAnim(true);
@@ -281,6 +320,34 @@ export default function App() {
     }
     prevHearts.current = hearts;
   }, [hearts]);
+
+  // Time Attack timer
+  useEffect(() => {
+    if (screen !== "game") return;
+    if (gameMode !== MODES.TIME) return;
+    if (!roundActive) return;
+    if (phase !== "answer") return;
+
+    setSecondsLeft(QUESTION_TIME);
+    const id = setInterval(() => {
+      setSecondsLeft((s) => {
+        if (s <= 1) {
+          clearInterval(id);
+          // time up = wrong
+          updateUser((st) => {
+            st.seen += 1;
+            st.streak = 0;
+            if (gameMode !== MODES.PRACTICE) {
+              st.hearts = Math.max(0, (st.hearts || MAX_LIVES) - 1);
+            }
+          });
+          setPhase("review");
+        }
+        return Math.max(0, s - 1);
+      });
+    }, 1000);
+    return () => clearInterval(id);
+  }, [screen, i, phase, gameMode, roundActive]);
 
   function toggleChoice(letter) {
     if (!cur || phase !== "answer") return;
@@ -304,21 +371,23 @@ export default function App() {
       s.seen += 1;
       if (ok) {
         s.correct += 1;
-        s.points = (s.points || 0) + 10; // nunca restamos
+        s.points = (s.points || 0) + 10; // keep your no-subtract rule
         s.streak += 1;
         s.bestStreak = Math.max(s.bestStreak || 0, s.streak);
       } else {
         s.streak = 0;
-        s.hearts = Math.max(0, (s.hearts || MAX_LIVES) - 1); // pierde vida
+        if (gameMode !== MODES.PRACTICE) {
+          s.hearts = Math.max(0, (s.hearts || MAX_LIVES) - 1);
+        }
       }
     });
 
     setPhase("review");
   }
 
-  // Al quedarse sin vidas: sube récord si mejora y reinicia RUN y DECK (25 nuevas)
+  // Hearts == 0 => upload record, reset run, stay in game screen with new round
   useEffect(() => {
-    if (hearts === 0) {
+    if (hearts === 0 && screen === "game") {
       setTimeout(() => {
         setAllUsers((prev) => {
           const next = { ...prev };
@@ -327,10 +396,8 @@ export default function App() {
           const runPoints = s.points || 0;
           const runBestStreak = s.bestStreak || 0;
 
-          // récord local (visual)
           s.bestPoints = Math.max(s.bestPoints || 0, s.points || 0);
 
-          // 🔗 récord global (Supabase)
           (async () => {
             try {
               await updateRecordIfBetter(currentUser, runPoints, runBestStreak);
@@ -340,7 +407,6 @@ export default function App() {
             }
           })();
 
-          // reset del run
           s.points = 0;
           s.seen = 0;
           s.correct = 0;
@@ -351,29 +417,30 @@ export default function App() {
           return next;
         });
 
-        resetRunAndDeck(); // nuevo set aleatorio de 25
+        resetRunAndDeck(gameMode);
         alert(`💔 ${currentUser} ran out of hearts! Run reset.\nYour best points record is saved.`);
       }, 50);
     }
-  }, [hearts]); // eslint-disable-line
+  }, [hearts, screen]); // eslint-disable-line
 
   function next() {
     if (!cur || hearts === 0) return;
     const nextIndex = i + 1;
 
-    // Al completar la ronda de 25 preguntas:
+    // Round done (25)
     if (nextIndex >= deck.length) {
       const acc = Math.round((stats.correct / Math.max(1, stats.seen)) * 100);
       const msg =
         `Finished 25 questions, ${currentUser}!\n` +
         `Accuracy: ${acc}%  •  Points this run: ${stats.points}\n` +
         `Best Points: ${bestPoints}  •  Best Streak: ${bestStreak}\n\n` +
-        `Start a new 25-question round?`;
+        `Start a new 25-question round (mode: ${gameMode})?`;
 
       if (window.confirm(msg)) {
-        // Sólo reiniciamos la ronda (no los puntos/vidas);
-        // tu lógica de reset de puntos/vidas sigue ocurriendo al perder las 3 vidas.
-        resetRunAndDeck();
+        resetRunAndDeck(gameMode);
+      } else {
+        // round ends but remain on game screen until user decides (can go back to menu)
+        setRoundActive(false);
       }
       return;
     }
@@ -383,8 +450,9 @@ export default function App() {
     setPhase("answer");
   }
 
-  // Atajos de selección (1–6)
+  // Selection keyboard shortcuts 1–6
   useEffect(() => {
+    if (screen !== "game") return;
     const onKey = (e) => {
       const digits = ["1", "2", "3", "4", "5", "6"];
       if (digits.includes(e.key)) {
@@ -394,15 +462,82 @@ export default function App() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [cur, chosen, phase, deck, i]);
+  }, [screen, cur, chosen, phase, deck, i]);
 
+  // ---------- Render ----------
+  if (screen === "menu") {
+    return (
+      <div className="min-h-screen bg-[#0b1220] text-gray-800 dark:bg-slate-950 dark:text-slate-100">
+        <div className="mx-auto w-full max-w-3xl px-5 py-10">
+          <h1 className="text-2xl font-bold mb-6 text-center">HANA Hero</h1>
+
+          {/* Mode & User pickers */}
+          <div className="rounded-2xl border border-slate-700 bg-slate-900 p-6 grid gap-4">
+            <div className="grid gap-2">
+              <label className="text-sm text-slate-300">User</label>
+              <select
+                value={currentUser}
+                onChange={(e) => setCurrentUser(e.target.value)}
+                className="rounded-lg border border-gray-600 bg-slate-950 px-3 py-2 text-sm"
+              >
+                {USERS.map((u) => (
+                  <option key={u} value={u}>
+                    {u}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="grid gap-2">
+              <label className="text-sm text-slate-300">Game Mode</label>
+              <select
+                value={gameMode}
+                onChange={(e) => setGameMode(e.target.value)}
+                className="rounded-lg border border-gray-600 bg-slate-950 px-3 py-2 text-sm"
+              >
+                <option value={MODES.CLASSIC}>Classic</option>
+                <option value={MODES.TIME}>Time Attack (10s)</option>
+                <option value={MODES.PRACTICE}>Practice (∞ hearts)</option>
+              </select>
+            </div>
+
+            <button
+              className="mt-2 rounded-lg border border-emerald-400 text-emerald-300 px-4 py-2 text-sm hover:bg-emerald-400/10"
+              onClick={() => {
+                // ensure full run reset on start
+                setAllUsers((prev) => {
+                  const next = { ...prev };
+                  const s = { ...getUserStats(prev, currentUser) };
+                  s.points = 0;
+                  s.seen = 0;
+                  s.correct = 0;
+                  s.streak = 0;
+                  s.hearts = MAX_LIVES;
+                  setUserStats(next, currentUser, s);
+                  return next;
+                });
+                resetRunAndDeck(gameMode);
+                setScreen("game");
+              }}
+            >
+              START ROUND
+            </button>
+          </div>
+
+          {/* Global leaderboards visible in menu */}
+          <CloudLeaderboards topPoints={topPoints} topStreaks={topStreaks} />
+        </div>
+      </div>
+    );
+  }
+
+  // --------- Game Screen ---------
   const subHint = cur ? (isMulti ? `Multiple answers: select ${maxSelectable}.` : `Single answer.`) : undefined;
   const selectedCount = chosen.size;
   const atLimit = phase === "answer" && isMulti && selectedCount >= maxSelectable;
 
   return (
     <div className="min-h-screen bg-[#0b1220] text-gray-800 dark:bg-slate-950 dark:text-slate-100">
-      {/* tiny CSS animations */}
       <style>{`
         @keyframes pop { from { transform: scale(.98); opacity:.92 } to { transform: scale(1); opacity:1 } }
         @keyframes heartbreak {
@@ -414,6 +549,30 @@ export default function App() {
       `}</style>
 
       <div className="mx-auto w-full max-w-3xl px-5 py-6">
+        {/* Small header with actions */}
+        <div className="mb-4 flex items-center gap-3">
+          <button
+            className="rounded-lg border border-slate-600 text-slate-200 px-3 py-2 text-sm hover:bg-slate-800"
+            onClick={() => {
+              if (window.confirm("Exit to menu? Current run will be discarded.")) {
+                setScreen("menu");
+                setRoundActive(false);
+              }
+            }}
+          >
+            ← Back to Menu
+          </button>
+
+          <button
+            className="rounded-lg border border-emerald-400 text-emerald-300 px-3 py-2 text-sm hover:bg-emerald-400/10"
+            onClick={() => {
+              resetRunAndDeck(gameMode);
+            }}
+          >
+            NEW ROUND
+          </button>
+        </div>
+
         {/* Top bar */}
         <div className="mb-4">
           <TopBar
@@ -421,10 +580,12 @@ export default function App() {
             correct={correct}
             streak={streak}
             lives={hearts}
-            total={deck.length} // 25 por ronda
+            total={deck.length}
             currentUser={currentUser}
             onChangeUser={setCurrentUser}
             lostAnim={lostAnim}
+            gameMode={gameMode}
+            secondsLeft={secondsLeft}
           />
         </div>
 
@@ -488,7 +649,7 @@ export default function App() {
           )}
         </div>
 
-        {/* 🌐 Global Leaderboards (Supabase) */}
+        {/* Global leaderboards visible here también */}
         <CloudLeaderboards topPoints={topPoints} topStreaks={topStreaks} />
       </div>
     </div>
