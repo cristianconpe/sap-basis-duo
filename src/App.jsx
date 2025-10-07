@@ -191,10 +191,11 @@ const CloudLeaderboards = ({ topPoints, topStreaks }) => {
       </ul>
     </div>
   );
+  
   return (
     <div className="grid md:grid-cols-2 gap-4 mt-8">
-      <Card title="🌐 Global Best Points" rows={topPoints} field="best_points" valueClass="text-sky-600 dark:text-sky-300" />
-      <Card title="🌐 Global Best Streaks" rows={topStreaks} field="best_streak" valueClass="text-amber-600 dark:text-amber-300" />
+      <Card title="🏆 Top Best Points" rows={topPoints} field="best_points" valueClass="text-sky-600 dark:text-sky-300" />
+      <Card title="🔥 Top Best Streak" rows={topStreaks} field="best_streak" valueClass="text-amber-600 dark:text-amber-300" />
     </div>
   );
 };
