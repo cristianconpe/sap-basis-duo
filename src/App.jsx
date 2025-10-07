@@ -1,8 +1,12 @@
-// App.jsx — Duolingo-style quiz (3 lives, minimal top bar, records per user)
-import { useEffect, useMemo, useRef, useState } from "react";
+// App.jsx — Duolingo-style quiz (3 lives, global leaderboards, 25-question rounds)
+import { useEffect, useRef, useState } from "react";
 import defaultDeck from "./sap_basis_duo_questions.json";
 
+<<<<<<< HEAD
 // 🔗 Supabase helpers (añadido)
+=======
+// 🔗 Supabase helpers
+>>>>>>> 80f9efa (Add shuffle for 25 random questions and round reset)
 import {
   getLeaderboardByPoints,
   getLeaderboardByStreak,
@@ -115,7 +119,7 @@ const Bubble = ({ children, sub }) => (
   </div>
 );
 
-// Hearts: ❤️ full, 💔 broken (persists)
+// Hearts: ❤️ full, 💔 broken (persiste rota)
 const Hearts = ({ lives, maxLives = 3, lostAnim }) => (
   <div className="flex items-center gap-1">
     {Array.from({ length: maxLives }).map((_, idx) => {
@@ -133,9 +137,8 @@ const Hearts = ({ lives, maxLives = 3, lostAnim }) => (
   </div>
 );
 
-// minimal top bar (mobile-friendly)
+// Top bar minimal (móvil)
 const TopBar = ({ seen, correct, streak, lives, total, currentUser, onChangeUser, lostAnim }) => {
-  const acc = seen ? Math.round((correct / seen) * 100) : 0;
   const progress = total ? Math.round((seen / total) * 100) : 0;
   return (
     <div className="flex flex-col gap-2">
@@ -174,6 +177,7 @@ const TopBar = ({ seen, correct, streak, lives, total, currentUser, onChangeUser
   );
 };
 
+<<<<<<< HEAD
 // two leaderboards (local records)
 const Leaderboard = ({ allUsers }) => {
   const list = Object.entries(allUsers).map(([name, s]) => ({ name, ...s }));
@@ -181,24 +185,29 @@ const Leaderboard = ({ allUsers }) => {
   const topBestStreak = [...list].sort((a, b) => b.bestStreak - a.bestStreak).slice(0, 6);
 
   const Card = ({ title, items, valueKey, valueClass }) => (
+=======
+// 🌐 Global leaderboards (Supabase)
+const CloudLeaderboards = ({ topPoints, topStreaks }) => {
+  const Card = ({ title, rows, field, valueClass }) => (
+>>>>>>> 80f9efa (Add shuffle for 25 random questions and round reset)
     <div className="rounded-2xl border border-gray-200 bg-white p-4 dark:bg-slate-900 dark:border-slate-700">
       <h3 className="font-semibold mb-3 text-gray-800 dark:text-slate-100">{title}</h3>
       <ul className="space-y-2">
-        {items.map((u, idx) => (
-          <li key={u.name} className="flex justify-between text-sm">
+        {rows.map((row, idx) => (
+          <li key={`${row.name}-${idx}`} className="flex justify-between text-sm">
             <div className="flex items-center gap-2">
               <span className="w-6 text-gray-500">{idx + 1}.</span>
-              <span className="font-medium">{u.name}</span>
+              <span className="font-medium">{row.name}</span>
             </div>
-            <span className={`font-semibold ${valueClass}`}>{u[valueKey]}</span>
+            <span className={`font-semibold ${valueClass}`}>{row[field]}</span>
           </li>
         ))}
       </ul>
     </div>
   );
-
   return (
     <div className="grid md:grid-cols-2 gap-4 mt-8">
+<<<<<<< HEAD
       <Card title="🏆 Top Best Points (Local)" items={topBestPoints} valueKey="bestPoints" valueClass="text-sky-600 dark:text-sky-300" />
       <Card title="🔥 Top Best Streak (Local)" items={topBestStreak} valueKey="bestStreak" valueClass="text-amber-600 dark:text-amber-300" />
     </div>
@@ -225,6 +234,8 @@ const CloudLeaderboards = ({ topPoints, topStreaks }) => {
   );
   return (
     <div className="grid md:grid-cols-2 gap-4 mt-8">
+=======
+>>>>>>> 80f9efa (Add shuffle for 25 random questions and round reset)
       <Card title="🌐 Global Best Points" rows={topPoints} field="best_points" valueClass="text-sky-600 dark:text-sky-300" />
       <Card title="🌐 Global Best Streaks" rows={topStreaks} field="best_streak" valueClass="text-amber-600 dark:text-amber-300" />
     </div>
@@ -247,16 +258,24 @@ export default function App() {
   const [lostAnim, setLostAnim] = useState(false);
   const prevHearts = useRef(null);
 
+<<<<<<< HEAD
   // 🔽 Global leaderboards (Supabase) — añadido
+=======
+  // 🔽 Global leaderboards (Supabase)
+>>>>>>> 80f9efa (Add shuffle for 25 random questions and round reset)
   const [topPoints, setTopPoints] = useState([]);
   const [topStreaks, setTopStreaks] = useState([]);
 
   async function refreshLeaderboards() {
     try {
+<<<<<<< HEAD
       const [tp, ts] = await Promise.all([
         getLeaderboardByPoints(10),
         getLeaderboardByStreak(10),
       ]);
+=======
+      const [tp, ts] = await Promise.all([getLeaderboardByPoints(10), getLeaderboardByStreak(10)]);
+>>>>>>> 80f9efa (Add shuffle for 25 random questions and round reset)
       setTopPoints(tp || []);
       setTopStreaks(ts || []);
     } catch (e) {
@@ -264,7 +283,11 @@ export default function App() {
     }
   }
 
+<<<<<<< HEAD
   // active user stats
+=======
+  // Stats del usuario activo
+>>>>>>> 80f9efa (Add shuffle for 25 random questions and round reset)
   const stats = getUserStats(allUsers, currentUser);
   const { points, bestPoints, seen, correct, streak, bestStreak, hearts } = stats;
 
@@ -273,6 +296,7 @@ export default function App() {
   const isMulti = answers.length > 1;
   const maxSelectable = answers.length || 1;
 
+<<<<<<< HEAD
   useEffect(() => {
     const initial = Array.isArray(defaultDeck) ? [...defaultDeck] : [];
     shuffle(initial);
@@ -288,8 +312,30 @@ export default function App() {
     for (let j = arr.length - 1; j > 0; j--) {
       const k = Math.floor(Math.random() * (j + 1));
       [arr[j], arr[k]] = [arr[k], arr[j]];
+=======
+  // --------- helpers de ronda 25 ---------
+  function getRandomDeck() {
+    const arr = Array.isArray(defaultDeck) ? [...defaultDeck] : [];
+    for (let k = arr.length - 1; k > 0; k--) {
+      const j = Math.floor(Math.random() * (k + 1));
+      [arr[k], arr[j]] = [arr[j], arr[k]];
+>>>>>>> 80f9efa (Add shuffle for 25 random questions and round reset)
     }
+    return arr.slice(0, 25); // 25 preguntas por ronda
   }
+
+  function resetRunAndDeck() {
+    setChosen(new Set());
+    setPhase("answer");
+    setI(0);
+    setDeck(getRandomDeck());
+  }
+  // ---------------------------------------
+
+  useEffect(() => {
+    resetRunAndDeck();         // carga 25 aleatorias al inicio
+    refreshLeaderboards();     // carga leaderboards globales
+  }, []);
 
   function updateUser(mutator) {
     setAllUsers((prev) => {
@@ -301,7 +347,7 @@ export default function App() {
     });
   }
 
-  // broken-heart animation when hearts drop
+  // animación de corazón roto al perder vida
   useEffect(() => {
     if (prevHearts.current !== null && hearts < prevHearts.current) {
       setLostAnim(true);
@@ -333,19 +379,19 @@ export default function App() {
       s.seen += 1;
       if (ok) {
         s.correct += 1;
-        s.points = (s.points || 0) + 10; // never subtract
+        s.points = (s.points || 0) + 10; // nunca restamos
         s.streak += 1;
         s.bestStreak = Math.max(s.bestStreak || 0, s.streak);
       } else {
         s.streak = 0;
-        s.hearts = Math.max(0, (s.hearts || MAX_LIVES) - 1); // lose life
+        s.hearts = Math.max(0, (s.hearts || MAX_LIVES) - 1); // pierde vida
       }
     });
 
     setPhase("review");
   }
 
-  // when hearts reach 0 -> finalize run, update bestPoints if improved, reset run (not global records)
+  // Al quedarse sin vidas: sube récord si mejora y reinicia RUN y DECK (25 nuevas)
   useEffect(() => {
     if (hearts === 0) {
       setTimeout(() => {
@@ -353,6 +399,7 @@ export default function App() {
           const next = { ...prev };
           const s = { ...getUserStats(prev, currentUser) };
 
+<<<<<<< HEAD
           // cache run values BEFORE reset
           const runPoints = s.points || 0;
           const runBestStreak = s.bestStreak || 0;
@@ -361,6 +408,15 @@ export default function App() {
           s.bestPoints = Math.max(s.bestPoints || 0, s.points || 0);
 
           // 🔗 SUBE récord a Supabase (no cambia tu lógica local)
+=======
+          const runPoints = s.points || 0;
+          const runBestStreak = s.bestStreak || 0;
+
+          // récord local (visual)
+          s.bestPoints = Math.max(s.bestPoints || 0, s.points || 0);
+
+          // 🔗 récord global (Supabase)
+>>>>>>> 80f9efa (Add shuffle for 25 random questions and round reset)
           (async () => {
             try {
               await updateRecordIfBetter(currentUser, runPoints, runBestStreak);
@@ -370,7 +426,11 @@ export default function App() {
             }
           })();
 
+<<<<<<< HEAD
           // reset run
+=======
+          // reset del run
+>>>>>>> 80f9efa (Add shuffle for 25 random questions and round reset)
           s.points = 0;
           s.seen = 0;
           s.correct = 0;
@@ -381,12 +441,7 @@ export default function App() {
           return next;
         });
 
-        const fresh = Array.isArray(defaultDeck) ? [...defaultDeck] : [];
-        shuffle(fresh);
-        setDeck(fresh);
-        setI(0);
-        setChosen(new Set());
-        setPhase("answer");
+        resetRunAndDeck(); // nuevo set aleatorio de 25
         alert(`💔 ${currentUser} ran out of hearts! Run reset.\nYour best points record is saved.`);
       }, 50);
     }
@@ -394,20 +449,31 @@ export default function App() {
 
   function next() {
     if (!cur || hearts === 0) return;
-    let nextIndex = i + 1;
+    const nextIndex = i + 1;
+
+    // Al completar la ronda de 25 preguntas:
     if (nextIndex >= deck.length) {
       const acc = Math.round((stats.correct / Math.max(1, stats.seen)) * 100);
-      alert(
-        `Finished, ${currentUser}!\nAccuracy: ${acc}%  •  Points this run: ${stats.points}\nBest Points: ${bestPoints}  •  Best Streak: ${bestStreak}`
-      );
+      const msg =
+        `Finished 25 questions, ${currentUser}!\n` +
+        `Accuracy: ${acc}%  •  Points this run: ${stats.points}\n` +
+        `Best Points: ${bestPoints}  •  Best Streak: ${bestStreak}\n\n` +
+        `Start a new 25-question round?`;
+
+      if (window.confirm(msg)) {
+        // Sólo reiniciamos la ronda (no los puntos/vidas);
+        // tu lógica de reset de puntos/vidas sigue ocurriendo al perder las 3 vidas.
+        resetRunAndDeck();
+      }
       return;
     }
+
     setI(nextIndex);
     setChosen(new Set());
     setPhase("answer");
   }
 
-  // selection shortcuts (1–6)
+  // Atajos de selección (1–6)
   useEffect(() => {
     const onKey = (e) => {
       const digits = ["1", "2", "3", "4", "5", "6"];
@@ -445,7 +511,7 @@ export default function App() {
             correct={correct}
             streak={streak}
             lives={hearts}
-            total={deck.length}
+            total={deck.length} // 25 por ronda
             currentUser={currentUser}
             onChangeUser={setCurrentUser}
             lostAnim={lostAnim}
@@ -457,7 +523,7 @@ export default function App() {
           {cur ? <Bubble sub={subHint}>{cur.q}</Bubble> : <Bubble>Deck loaded. Click an option to start.</Bubble>}
         </div>
 
-        {/* Multi selection counter (optional) */}
+        {/* Multi counter */}
         {cur && isMulti && (
           <div className="mb-4 text-sm text-gray-300">
             Selected: <span className="font-semibold">{selectedCount}</span> / {maxSelectable}
@@ -512,10 +578,14 @@ export default function App() {
           )}
         </div>
 
+<<<<<<< HEAD
         {/* Leaderboard (records locales) */}
         <Leaderboard allUsers={allUsers} />
 
         {/* Leaderboards globales (Supabase) — añadido */}
+=======
+        {/* 🌐 Global Leaderboards (Supabase) */}
+>>>>>>> 80f9efa (Add shuffle for 25 random questions and round reset)
         <CloudLeaderboards topPoints={topPoints} topStreaks={topStreaks} />
       </div>
     </div>
