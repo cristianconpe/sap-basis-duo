@@ -86,7 +86,7 @@
 "choices": [
 ["A", "Follow the instructions in the SAP Notes for the used version of SUM."],
 ["B", "Execute the SAP Load Generator (SGEN) transaction for invalid loads."],
-["C", "Import the modification adjustment transports from the update of the "Development System"."],
+["C", "Import the modification adjustment transports from the update of the \"Development System\"."],
 ["D", "Update the database software."]
 ],
 "answers": ["A", "C"]
